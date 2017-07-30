@@ -16,7 +16,7 @@ jQuery(document).ready(function() {
     console.log(fontsize + '%');
     var gist = getURLParameter('gist');
     var filename = getURLParameter('filename');
-    if (!gist) gist = '2a06603706fd7c2eb5c93f34ed316354';
+    if (!gist) gist = 'd325f0e1bb629613622606f1e4765eda';
     $.ajax({
         url: 'https://api.github.com/gists/' + gist,
         type: 'GET',
@@ -39,7 +39,7 @@ jQuery(document).ready(function() {
         render(objects[0]);
         render_sections();
         render_info();
-        if (gist === '2a06603706fd7c2eb5c93f34ed316354') $('#header h1').attr('id', 'title');
+        if (gist === 'd325f0e1bb629613622606f1e4765eda') $('#header h1').attr('id', 'title');
     }).error(function(e) {
         console.log('Error on ajax return.');
     });
@@ -50,33 +50,17 @@ jQuery(document).ready(function() {
     if (!columns) columns = 3;
 
     function render(content) {
-        var md = window.markdownit();
+        
+        var md = window.markdownit({
+            html: true, // Enable HTML tags in source
+            xhtmlOut: true, // Use '/' to close single tags (<br />).
+            breaks: true, // Convert '\n' in paragraphs into <br>
+            langPrefix: 'language-', // CSS language prefix for fenced blocks.
+            linkify: true,
+            typographer: true,
+            quotes: '“”‘’'
+        });
         $('#wrapper').html( md.render(content) );
-        
-        // handle variations, display first item
-        var $html = '';
-        $('li strong').each(function(){
-            var items = $(this).text().split('/');
-            $.each( items, function( key, value ) {
-                if (key == 0){
-                    $html = '<span class="variation current">' + value + '</span>';
-                } else {
-                    $html += '<span class="variation">' + value + '</span>';
-                }
-            });
-            $(this).html($html);
-        });
-        
-        // make variations clickable
-        $('li strong').click(function() {
-            var current = $(this).find('.variation.current');
-            $(current).removeClass('current');
-            if ($(current).next('.variation').length) {
-                $(current).next('.variation').addClass('current');
-            } else {
-                $(this).find('.variation').first().addClass('current');
-            }
-        });
     }
     
     function columnize(columns) {
@@ -121,10 +105,28 @@ jQuery(document).ready(function() {
             $(this).wrapInner('<a class="handle" name="' + name + '"/>');
             $(this).wrap('<div class="header/>');
             $(this).nextUntil("h2").andSelf().wrapAll('<div class="section" id="' + name + '"/>');
+            $(this).nextUntil("h2").wrapAll('<div class="content"/>');
         });
         
         // wrap all command sections in new section
         $('#header').siblings().wrapAll('<section id="commands"/>');
+        
+        // add alternate classes to paragraphs
+        var counter = 0;
+        $('.content').children().each(function() {
+            if ( $( this ).is('p') ) {
+                if (counter === 0) {
+                    $(this).addClass('alternate');
+                    // check if next element is ul and add class to it as well if so
+                    var $next = $(this).next();
+                    if ( $next.is('ul') || $next.is('blockquote') || $next.is('code') ) {
+                        $next.addClass('alternate');
+                    }
+                }
+                counter += 1;
+                if (counter === 2) counter = 0;
+            }
+        });
         
         columnize(columns);
         

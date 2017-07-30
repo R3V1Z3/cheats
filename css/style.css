@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
+/* Print styling */
+
 @media print {
   #info {
     display: none !important;
@@ -10,6 +12,8 @@
 }
 
 @page { size:8.5in 11in; margin: 0.25cm }
+
+/* General */
 
 body, html {
   margin: 0;
@@ -27,6 +31,10 @@ a {
   text-decoration: none;
 }
 
+code {
+  background-color: rgba(0,0,0,0.075);
+}
+
 #wrapper {
   justify-content: center;
   align-items: center;
@@ -34,9 +42,7 @@ a {
   padding: 0 20px;
 }
 
-#header {
-  padding: 0 20px;
-}
+/* Header */
 
 #header p a {
   text-decoration: none;
@@ -53,6 +59,8 @@ a {
   color: #ff851b;
   font-weight: bold;
 }
+
+/* Columns */
 
 .column {
   float: left;
@@ -77,6 +85,8 @@ a {
   display: block;
   width: 25%;
 }
+
+/* Command sections */
 
 #commands .section {
   border-bottom: 2px solid #ff8419;
@@ -115,48 +125,31 @@ a {
 }
 
 .section ul {
-  list-style-type:none;
+  list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
 .section ul li {
   padding: 2px 6px;
+  margin: 0 0 0 8px;
+  border-left: 2px solid #ff8419;
 }
 
-.section ul li {
-    background: #fcfcfc;
+li:nth-child(odd) {
+    background: #fff9f4;
 }
 
-.section ul li:nth-child(odd) {
-    background: #fff1e5;
+.section p {
+  padding: 2px 6px;
+  margin: 0;
 }
 
-em {
-  color: #999;
-  font-size: 0.85em;
+.section .alternate {
+  background: #fff1e5;
 }
 
-li strong {
-  border-radius: 5px;
-  padding: 1px 3px;
-  font-weight: normal;
-  color: #ff851b;
-  cursor: pointer;
-}
-
-li strong:hover {
-  color: #F8981D;
-  background-color: #f7f7f7;
-}
-
-li strong .variation {
-  display: none;
-}
-
-li strong .variation.current {
-  display: inline;
-}
+/* Info panel */
 
 #info {
   background: rgba(0,0,0,0.9);
@@ -230,7 +223,23 @@ li strong .variation.current {
   font-weight: bold;
 }
 
+/* Special markdown for kdb */
+kbd {
+    display: inline-block;
+    padding: 3px 5px;
+    font-size: 11px;
+    line-height: 10px;
+    color: #444d56;
+    vertical-align: middle;
+    background-color: #fafbfc;
+    border: solid 1px #c6cbd1;
+    border-bottom-color: #959da5;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 #959da5;
+}
+
 /* Scrollbar styling */
+
 ::-webkit-scrollbar {
     background: rgba(255, 133, 27, 0.2);
 }
