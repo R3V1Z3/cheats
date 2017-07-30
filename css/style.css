@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:300');
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
 @media print {
   #info {
@@ -16,14 +16,14 @@ body, html {
   padding: 0;
   border: 0;
   outline: 0;
-  font-size: 110%;
+  font-size: 100%;
   vertical-align: baseline;
   background: transparent;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'PT Sans', sans-serif;
 }
 
 a {
-  color: #31C4F3;
+  color: #ff851b;
   text-decoration: none;
 }
 
@@ -38,24 +38,20 @@ a {
   padding: 0 20px;
 }
 
-h1 a, h2 a, h3 a {
-  color: #000;
-}
-
-#alexa-cheats:after {
-  content: 'heet';
-  padding-left: 2px;
-  color: #31C4F3;
-  font-weight: bold;
-}
-
 #header p a {
   text-decoration: none;
   color: #aaa;
 }
 
-#commands {
-  display: block;
+#title a {
+  color: #000;
+}
+
+#title:after {
+  content: 'heet';
+  padding-left: 2px;
+  color: #ff851b;
+  font-weight: bold;
 }
 
 .column {
@@ -83,16 +79,61 @@ h1 a, h2 a, h3 a {
 }
 
 #commands .section {
-  padding: 0 20px;
-  /* width: 100%; */
+  border-bottom: 2px solid #ff8419;
+  margin: 20px;
 }
 
 #commands .handle {
   cursor: -webkit-grab;
 }
 
+#commands .section .header {
+  color: white;
+  background-color: #ff8419;
+}
+
+.section h1,
+.section h2,
+.section h3,
+.section h4,
+.section h5,
+.section h6 {
+  color: #ffffff;
+  margin: 0;
+  background: #ff8419;
+  font-size: 1em;
+  padding: 2px 6px;
+}
+
+.section h1 a,
+.section h2 a,
+.section h3 a,
+.section h4 a,
+.section h5 a,
+.section h6 a {
+  color: #ffffff;
+}
+
+.section ul {
+  list-style-type:none;
+  padding: 0;
+  margin: 0;
+}
+
+.section ul li {
+  padding: 2px 6px;
+}
+
+.section ul li {
+    background: #fcfcfc;
+}
+
+.section ul li:nth-child(odd) {
+    background: #fff1e5;
+}
+
 em {
-  color: #aaa;
+  color: #999;
   font-size: 0.85em;
 }
 
@@ -100,9 +141,8 @@ li strong {
   border-radius: 5px;
   padding: 1px 3px;
   font-weight: normal;
-  color: #31C4F3;
+  color: #ff851b;
   cursor: pointer;
-  text-shadow: 0px 0px #31C4F3;
 }
 
 li strong:hover {
@@ -116,11 +156,6 @@ li strong .variation {
 
 li strong .variation.current {
   display: inline;
-}
-
-ul {
-  list-style-type:none;
-  padding-left:0;
 }
 
 #info {
@@ -148,13 +183,13 @@ ul {
 }
 
 #info #gist-url a:hover {
-  color: #F8981D;
+  color: #ffffff;
 }
 
 #info #toc {
   max-height: 200px;
   overflow-y: scroll;
-  background-color: rgba(49, 196, 243, 0.1);
+  background-color: rgba(255, 0, 0, 0.1);
   border-radius: 5px;
 }
 
@@ -163,11 +198,11 @@ ul {
   font-size: 0.85em;
   margin-left: 10px;
   text-decoration: none;
-  color: #31C4F3;
+  color: #ff851b;
 }
 
 #info #toc a:hover {
-  color: #F8981D;
+  color: #ffffff;
 }
 
 #info #hide {
@@ -175,20 +210,20 @@ ul {
   text-align: right;
   bottom: 20px;
   right: 20px;
-  color: #31C4F3;
+  color: #ff851b;
 }
 
 #info #hide:hover {
-  color: #F8981D;
+  color: #ffffff;
   cursor: pointer;
 }
 
 #info #hide:hover .key {
-  background-color: #F8981D;
+  background-color: #ffffff;
 }
 
 #info #hide .key {
-  background-color: #31C4F3;
+  background-color: #ff851b;
   border-radius: 50%;
   padding: 0px 7px;
   color: #000;
@@ -197,13 +232,12 @@ ul {
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-    background: rgba(49, 196, 243, 0.2);
+    background: rgba(255, 133, 27, 0.2);
 }
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(49, 196, 243, 0.5);
-    /* border: solid whiteSmoke 4px; */
+    background-color: rgba(255, 133, 27, 0.5);
     border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(49, 196, 243, 1);
+    background-color: rgba(255, 133, 27, 1);
 }

@@ -1,6 +1,6 @@
 /* global $, jQuery, dragula, location */
 var TOC = [];
-var columns = 2;
+var columns = 3;
 var gist;
 jQuery(document).ready(function() {
     
@@ -39,7 +39,7 @@ jQuery(document).ready(function() {
         render(objects[0]);
         render_sections();
         render_info();
-        if (gist === '2a06603706fd7c2eb5c93f34ed316354') $('#header h1').attr('id', 'alexa-cheats');
+        if (gist === '2a06603706fd7c2eb5c93f34ed316354') $('#header h1').attr('id', 'title');
     }).error(function(e) {
         console.log('Error on ajax return.');
     });
@@ -47,7 +47,7 @@ jQuery(document).ready(function() {
     var showonly = getURLParameter('showonly');
     if (!showonly) showonly = '';
     var columns = getURLParameter('columns');
-    if (!columns) columns = 2;
+    if (!columns) columns = 3;
 
     function render(content) {
         var md = window.markdownit();
@@ -119,6 +119,7 @@ jQuery(document).ready(function() {
             name = name.replace(',', '');
             // add anchor link
             $(this).wrapInner('<a class="handle" name="' + name + '"/>');
+            $(this).wrap('<div class="header/>');
             $(this).nextUntil("h2").andSelf().wrapAll('<div class="section" id="' + name + '"/>');
         });
         
