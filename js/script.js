@@ -1,19 +1,38 @@
-/* global $, jQuery, dragula, location */
+/* global $, jQuery, dragula, location, hljs */
 var TOC = [];
-var columns = 3;
-var gist;
-jQuery(document).ready(function() {
-    
+var toggle_html='<span class="toggle">-</span>';
+
     // get url parameters
     // from http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript/11582513#11582513
     function getURLParameter(name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
     }
     
+    var showonly = getURLParameter('showonly');
+    if (!showonly) showonly = '';
+    var columns = getURLParameter('columns');
+    if (!columns) columns = 3;
+    
+    // let user select section heading and header tags
+    var header = getURLParameter('header');
+    if (!header) header = 'h1';
+    var heading = getURLParameter('heading');
+    if (!heading) heading = 'h2';
+    
+    // allow user to override fontsize
     var fontsize = getURLParameter('fontsize');
     if (!fontsize) fontsize = 110;
     $('body').css('font-size', fontsize + '%');
-    console.log(fontsize + '%');
+
+jQuery(document).ready(function() {
+
+    
+    // get highlight.js style if provided
+    var highlight = getURLParameter('highlight');
+    if (!highlight) highlight = 'default';
+    // add style reference to head to load it
+    $('head').append('<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/' + highlight.replace(/[^a-zA-Z0-9-_]+/ig, '') + '.min.css">');
+    
     var gist = getURLParameter('gist');
     var filename = getURLParameter('filename');
     if (!gist) gist = 'd325f0e1bb629613622606f1e4765eda';
@@ -39,15 +58,10 @@ jQuery(document).ready(function() {
         render(objects[0]);
         render_sections();
         render_info();
-        if (gist === 'd325f0e1bb629613622606f1e4765eda') $('#header h1').attr('id', 'title');
+        render_extra();
     }).error(function(e) {
         console.log('Error on ajax return.');
     });
-    
-    var showonly = getURLParameter('showonly');
-    if (!showonly) showonly = '';
-    var columns = getURLParameter('columns');
-    if (!columns) columns = 3;
 
     function render(content) {
         
@@ -58,9 +72,88 @@ jQuery(document).ready(function() {
             langPrefix: 'language-', // CSS language prefix for fenced blocks.
             linkify: true,
             typographer: true,
-            quotes: '“”‘’'
+            quotes: '“”‘’',
+            highlight: function(str, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return '<pre class="hljs"><code>' +
+                            hljs.highlight(lang, str, true).value +
+                            '</code></pre>';
+                    }
+                    catch (__) {}
+                }
+
+                return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+            }
         });
         $('#wrapper').html( md.render(content) );
+    }
+    
+    function render_sections() {
+        
+        // header section
+        if ( $('#wrapper ' + header).length ) {
+            $('#wrapper ' + header).each(function() {
+                $(this).nextUntil(heading).andSelf().wrapAll('<section id="header"/>');
+                $(this).wrapInner('<a name="header"/>');
+            });
+        } else {
+            //no header, so we'll add an empty one
+            $('#wrapper').prepend('<section id="header"></section>');
+        }
+        
+        // command sections
+        $('#wrapper ' + heading).each(function() {
+            // get content of heading
+            var name = $(this).text().toLowerCase().replace(/\s/g, "-");
+            name = name.replace(',', '');
+            $(this).append(toggle_html);
+            // add anchor link to make draggable
+            $(this).wrapInner('<a class="handle" name="' + name + '"/>');
+            $(this).wrap('<div class="heading/>');
+            $(this).nextUntil(heading).andSelf().wrapAll('<div class="section" id="' + name + '"/>');
+            $(this).nextUntil(heading).wrapAll('<div class="content"/>');
+        });
+        
+        // wrap all command sections in new section
+        // can't use #header since there's a header in the info panel
+        $('#header').siblings().wrapAll('<section id="commands"/>');
+        
+        // add alternate classes to paragraphs
+        var counter = 0;
+        $('.content').children().each(function() {
+            if ( $( this ).is('p') ) {
+                if (counter === 0) {
+                    $(this).addClass('alternate');
+                    // check next element and add 'alternative' class as needed
+                    var $next = $(this).next();
+                    if ( $next.is('ul') || $next.is('blockquote') || $next.is('code') ) {
+                        $next.addClass('alternate');
+                    }
+                }
+                counter += 1;
+                if (counter === 2) counter = 0;
+            }
+        });
+        
+        columnize(columns);
+        
+        // hide all other sections if showonly has been specified
+        if(showonly != '') {
+            $('#' + showonly).siblings().hide();
+        }
+        
+        // make sections draggable
+        dragula( $('.column').toArray(),  {
+            moves: function (el, container, handle) {
+                return handle.className === 'handle';
+            }
+        }).on('drop', function (el) {
+            // update toc
+            render_toc_html();
+            
+        });
+  
     }
     
     function columnize(columns) {
@@ -88,69 +181,10 @@ jQuery(document).ready(function() {
         });
     }
     
-    function render_sections() {
-        
-        // header section
-        $('h1').each(function() {
-            $(this).nextUntil("h2").andSelf().wrapAll('<section id="header"/>');
-            $(this).wrapInner('<a name="header"/>');
-        });
-        
-        // command sections
-        $('h2').each(function() {
-            // get content of h2
-            var name = $(this).text().toLowerCase().replace(/\s/g, "-");
-            name = name.replace(',', '');
-            // add anchor link
-            $(this).wrapInner('<a class="handle" name="' + name + '"/>');
-            $(this).wrap('<div class="header/>');
-            $(this).nextUntil("h2").andSelf().wrapAll('<div class="section" id="' + name + '"/>');
-            $(this).nextUntil("h2").wrapAll('<div class="content"/>');
-        });
-        
-        // wrap all command sections in new section
-        $('#header').siblings().wrapAll('<section id="commands"/>');
-        
-        // add alternate classes to paragraphs
-        var counter = 0;
-        $('.content').children().each(function() {
-            if ( $( this ).is('p') ) {
-                if (counter === 0) {
-                    $(this).addClass('alternate');
-                    // check if next element is ul and add class to it as well if so
-                    var $next = $(this).next();
-                    if ( $next.is('ul') || $next.is('blockquote') || $next.is('code') ) {
-                        $next.addClass('alternate');
-                    }
-                }
-                counter += 1;
-                if (counter === 2) counter = 0;
-            }
-        });
-        
-        columnize(columns);
-        
-        // hide all other sections if showonly has been specified
-        if(showonly != '') {
-            $('#' + showonly).siblings().hide();
-        }
-        
-        // make sections draggable
-        dragula( $('.column').toArray(),  {
-            moves: function (el, container, handle) {
-                return handle.className === 'handle';
-            }
-        }).on('drop', function (el) {
-            // update toc
-            $('#toc').html( toc_html() );
-        });
-  
-    }
-    
     function render_info() {
         
         // render TOC
-        $('#toc').html( toc_html() );
+        render_toc_html();
         
         // command count
         var command_count = $('li').length;
@@ -172,16 +206,45 @@ jQuery(document).ready(function() {
         });
     }
     
-    function toc_html() {
+    function render_toc_html() {
         var html = '';
         // iterate section classes and get id name to compose TOC
         $( '#commands .section' ).each(function() {
             var name = $( this ).attr( 'id' );
-            html += '<a href="#' + name + '">';
+            var toggle_hidden = '';
+            if ( $('#' + name).is(':hidden') ){
+                toggle_hidden ='class="hidden"';
+            }
+            html += '<a href="#' + name + '" ' + toggle_hidden + '>';
             html += name;
+            html += toggle_html;
             html += '</a>';
         });
-        return html;
+        $('#toc').html( html );
+        
+        // add click event to items
+        $( "#toc .toggle" ).click(function() {
+            var name = $(this).parent().attr('href');
+            console.log("parent name: " + name);
+            console.log("parent hasclass hidden: " + $(this).parent().hasClass('hidden')  );
+            // toggle hidden status
+            if( $(this).parent().hasClass('hidden') ) {
+                $(name).show();
+                $(this).parent().removeClass('hidden');
+            } else {
+                $(name).hide();
+            }
+            render_toc_html();
+        });
+    }
+    
+    function render_extra () {
+        if (gist === 'd325f0e1bb629613622606f1e4765eda') $('#header h1').attr('id', 'title');
+        $( ".section .toggle" ).click(function() {
+            var name = $(this).parent().attr('name');
+            $('#' + name).hide();
+            render_toc_html();
+        });
     }
 
 });
