@@ -1,22 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
 
-/* Print styling */
-
-@media print {
-  #wrapper {
-    padding: 0px;
-  }
-  #info {
-    display: none;
-  }
-  .section .toggle {
-    display: none;
-  }
-}
-
-@page { size:8.5in 11in; margin: 0.25cm }
-
 /* General */
 
 body, html {
@@ -37,6 +21,14 @@ a {
 
 code {
   width: 100%;
+}
+
+pre {
+  margin: 5px;
+}
+
+pre.hljs {
+    background: rgba(255,255,255,0.45) !important;
 }
 
 #wrapper {
@@ -67,29 +59,6 @@ code {
   font-weight: bold;
 }
 
-/* Columns */
-
-.column {
-  display: block;
-  float: left;
-}
-
-.column1of1 {
-  width: 100%;
-}
-
-.column1of2 {
-  width: 50%;
-}
-
-.column1of3 {
-  width: 33%;
-}
-
-.column1of4 {
-  width: 25%;
-}
-
 /* Command sections */
 
 #commands .section {
@@ -112,7 +81,7 @@ code {
   border-radius: 50%;
   cursor: pointer;
   padding: 0px 4px;
-  font-size: 0.7em;
+  font-size: 0.9em;
   float: right;
   margin-right: 4px;
 }
@@ -127,18 +96,12 @@ code {
 .section h4,
 .section h5,
 .section h6 {
-  color: #ffffff;
   margin: 0;
   font-size: 1em;
   padding: 2px 6px;
 }
 
-.section h1 a,
-.section h2 a,
-.section h3 a,
-.section h4 a,
-.section h5 a,
-.section h6 a {
+.section a.handle {
   color: #ffffff;
 }
 
@@ -150,6 +113,8 @@ code {
 
 .section ul li {
   padding: 2px 6px;
+  border-left: 2px solid rgba(0,0,0,0.25);
+  margin: 0px 6px;
 }
 
 .section li:nth-child(odd) {
@@ -276,6 +241,30 @@ kbd {
   font-weight: bold;
 }
 
+/* Columns */
+
+.column {
+  display: block;
+  float: left;
+}
+
+.column1of1 {
+  width: 100%;
+}
+
+.column1of2 {
+  width: 50%;
+}
+
+.column1of3 {
+  width: 33%;
+}
+
+.column1of4 {
+  width: 25%;
+}
+
+
 /* Scrollbar styling */
 
 ::-webkit-scrollbar {
@@ -290,3 +279,19 @@ kbd {
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgb(255, 133, 27);
 }
+
+/* Print styling */
+
+@media print {
+  #wrapper {
+    padding: 0px;
+  }
+  #info {
+    display: none;
+  }
+  .section .toggle {
+    display: none;
+  }
+}
+
+@page { size:8.5in 11in; margin: 0.25cm }

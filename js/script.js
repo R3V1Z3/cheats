@@ -33,6 +33,7 @@ jQuery(document).ready(function() {
     // add style reference to head to load it
     $('head').append('<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/' + highlight.replace(/[^a-zA-Z0-9-_]+/ig, '') + '.min.css">');
     
+    // allow custom Gist
     var gist = getURLParameter('gist');
     var filename = getURLParameter('filename');
     if (!gist) gist = 'd325f0e1bb629613622606f1e4765eda';
@@ -62,6 +63,42 @@ jQuery(document).ready(function() {
     }).error(function(e) {
         console.log('Error on ajax return.');
     });
+    
+    // allow for custom CSS via Gist
+    var css = getURLParameter('css');
+    var cssfilename = getURLParameter('cssfilename');
+    if (css) {
+        $.ajax({
+            url: 'https://api.github.com/gists/' + css,
+            type: 'GET',
+            dataType: 'jsonp'
+        }).success(function(gistdata) {
+            var objects = [];
+            if (!cssfilename) {
+                for (var file in gistdata.data.files) {
+                    if (gistdata.data.files.hasOwnProperty(file)) {
+                        var o = gistdata.data.files[file].content;
+                        if (o) {
+                            objects.push(o);
+                        }
+                    }
+                }
+            }
+            else {
+                objects.push(gistdata.data.files[filename].content);
+            }
+            render_css(objects[0]);
+        }).error(function(e) {
+            console.log('Error on ajax return.');
+        });
+    }
+    
+    function render_css(css) {
+        // attempt to sanitize CSS so hacker don't splode our website
+        var parser = new HtmlWhitelistedSanitizer(true);
+        var sanitizedHtml = parser.sanitizeString(css);
+        $('head').append('<style>' + sanitizedHtml + '</style>');
+    }
 
     function render(content) {
         
@@ -125,9 +162,14 @@ jQuery(document).ready(function() {
             if ( $( this ).is('p') ) {
                 if (counter === 0) {
                     $(this).addClass('alternate');
+                    // check previous element and add 'alternative' class as needed
+                    var $prev = $(this).prev();
+                    if ( $prev.is('h1') || $prev.is('h2') || $prev.is('h3') || $prev.is('h4') || $prev.is('h5') || $prev.is('h6')) {
+                        $prev.addClass('alternate');
+                    }
                     // check next element and add 'alternative' class as needed
                     var $next = $(this).next();
-                    if ( $next.is('ul') || $next.is('blockquote') || $next.is('code') ) {
+                    if ( $next.is('ul') || $next.is('blockquote') || $next.is('code')  || $next.is('pre') ) {
                         $next.addClass('alternate');
                     }
                 }
