@@ -264,6 +264,15 @@ kbd {
   width: 25%;
 }
 
+/* Variations, used for voice assistant cheatsheets */
+
+.content li strong .variation {
+  display: none;
+}
+
+.content li strong .variation.current {
+  display: inline;
+}
 
 /* Scrollbar styling */
 

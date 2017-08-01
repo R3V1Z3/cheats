@@ -23,6 +23,10 @@ var toggle_html='<span class="toggle">-</span>';
     var fontsize = getURLParameter('fontsize');
     if (!fontsize) fontsize = 110;
     $('body').css('font-size', fontsize + '%');
+    
+    // let user specify selector if variations will be used
+    var variations = getURLParameter('variations');
+    if (!variations) variations = '';
 
 jQuery(document).ready(function() {
 
@@ -60,6 +64,7 @@ jQuery(document).ready(function() {
         render_sections();
         render_info();
         render_extra();
+        render_variations(variations); // used in voice assistant cheatsheets
     }).error(function(e) {
         console.log('Error on ajax return.');
     });
@@ -287,6 +292,36 @@ jQuery(document).ready(function() {
             $('#' + name).hide();
             render_toc_html();
         });
+    }
+    
+    function render_variations(selector) {
+        if ( selector === 'yes' || selector === 'true' ) selector = '.content li strong';
+        if ( selector != '' ) {
+            // handle variations, display first item
+            var $html = '';
+            $(selector).each(function(){
+                var items = $(this).text().split('/');
+                $.each( items, function( key, value ) {
+                    if (key == 0){
+                        $html = '<span class="variation current">' + value + '</span>';
+                    } else {
+                        $html += '<span class="variation">' + value + '</span>';
+                    }
+                });
+                $(this).html($html);
+            });
+            
+            // make variations clickable
+            $(selector).click(function() {
+                var current = $(this).find('.variation.current');
+                $(current).removeClass('current');
+                if ($(current).next('.variation').length) {
+                    $(current).next('.variation').addClass('current');
+                } else {
+                    $(this).find('.variation').first().addClass('current');
+                }
+            });
+        }
     }
 
 });
