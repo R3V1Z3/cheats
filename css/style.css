@@ -9,7 +9,7 @@ body, html {
   border: 0;
   outline: 0;
   font-size: 100%;
-  vertical-align: baseline;
+  vertical-align: middle;
   background: transparent;
   font-family: 'Inconsolata', monospace;
 }
@@ -152,7 +152,6 @@ kbd {
 /* Info panel */
 
 #info {
-  background: rgb(0,0,0);
   background: rgba(0,0,0,0.9);
   position: fixed;
   float:right;
@@ -163,8 +162,11 @@ kbd {
   box-shadow: -2px 2px 8px rgba(0,0,0,0.45);
   border-radius: 0px 0px 0px 10px;
   padding: 10px;
-  color: #fff;
   font-family: 'Inconsolata', monospace;
+}
+
+#info * {
+  color: #fff;
 }
 
 #info a {
@@ -299,6 +301,10 @@ kbd {
   }
   .section .toggle {
     display: none;
+  }
+  #custom #wrapper .section {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
