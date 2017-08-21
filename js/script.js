@@ -29,6 +29,9 @@ if (fontsize) {
 var variations = getURLParameter('variations');
 if (!variations) variations = '';
 
+var gist_filename = 'README.md';
+var css_filename = 'Default';
+
 jQuery(document).ready(function() {
 
     // get highlight.js style if provided
@@ -58,6 +61,9 @@ jQuery(document).ready(function() {
             if (!filename) {
                 for (var file in gistdata.data.files) {
                     if (gistdata.data.files.hasOwnProperty(file)) {
+                        // get gist filename
+                        gist_filename = gistdata.data.files[file].filename;
+                        // get file contents
                         var o = gistdata.data.files[file].content;
                         if (o) {
                             objects.push(o);
@@ -96,6 +102,9 @@ jQuery(document).ready(function() {
             if (!cssfilename) {
                 for (var file in gistdata.data.files) {
                     if (gistdata.data.files.hasOwnProperty(file)) {
+                        // get filename
+                        css_filename = gistdata.data.files[file].filename;
+                        // get file contents
                         var o = gistdata.data.files[file].content;
                         if (o) {
                             objects.push(o);
@@ -117,6 +126,8 @@ jQuery(document).ready(function() {
         var parser = new HtmlWhitelistedSanitizer(true);
         var sanitizedHtml = parser.sanitizeString(css);
         $('head').append('<style>' + sanitizedHtml + '</style>');
+        // update info panel
+        render_info();
     }
 
     function render(content) {
@@ -255,7 +266,12 @@ jQuery(document).ready(function() {
         
         if (gist) {
             var url = 'https://gist.github.com/' + gist;
-            $('#gist-url').html('<a href="' + url + '">' + gist + '</a>');
+            $('#gist-url').html('<a href="' + url + '">' + gist_filename + '</a>');
+        }
+        
+        if (css) {
+            url = 'https://gist.github.com/' + css;
+            $('#css-url').html('<a href="' + url + '">' + css_filename + '</a>');
         }
         
         // Add keypress to toggle info on '?' or 'h'
