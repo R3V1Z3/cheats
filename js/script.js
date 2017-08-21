@@ -86,6 +86,7 @@ jQuery(document).ready(function() {
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
+        register_events();
     }
     
     
@@ -259,11 +260,6 @@ jQuery(document).ready(function() {
         var command_count = $('li').length;
         $('#command-count').html('Total commands: ' + command_count);
         
-        // hide info
-        $('#hide').click(function() {
-            $('#info').toggle();
-        });
-        
         if (gist) {
             var url = 'https://gist.github.com/' + gist;
             $('#gist-url').html('<a href="' + url + '">' + gist_filename + '</a>');
@@ -273,13 +269,6 @@ jQuery(document).ready(function() {
             url = 'https://gist.github.com/' + css;
             $('#css-url').html('<a href="' + url + '">' + css_filename + '</a>');
         }
-        
-        // Add keypress to toggle info on '?' or 'h'
-        $(document).keypress(function(e) {
-            if(e.which == 104 || e.which == 63 || e.which == 72 || e.which == 47) {
-                $('#info').toggle();
-            }
-        });
     }
     
     function render_toc_html() {
@@ -353,6 +342,20 @@ jQuery(document).ready(function() {
                 }
             });
         }
+    }
+    
+    function register_events() {
+        // event handler to toggle info panel
+        $('#hide').click(function() {
+            $('#info').toggle();
+        });
+        
+        // Add keypress to toggle info on '?' or 'h'
+        $(document).keypress(function(e) {
+            if(e.which == 104 || e.which == 63 || e.which == 72 || e.which == 47) {
+                $('#info').toggle();
+            }
+        });
     }
 
 });

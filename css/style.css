@@ -162,10 +162,10 @@ kbd {
   box-shadow: -2px 2px 8px rgba(0,0,0,0.45);
   border-radius: 0px 0px 0px 10px;
   padding: 10px;
-  font-family: 'Inconsolata', monospace;
 }
 
 #info * {
+  font-family: 'Inconsolata', monospace;
   color: #fff;
 }
 
@@ -178,9 +178,17 @@ kbd {
   color: #ffffff;
 }
 
-#info h1, #info h1 a, #info h2, #info h3 {
-  color: #fff;
-  font-size: 1.1em;
+#info h1 {
+  margin: 0;
+}
+
+#custom #info h1,
+#custom #info h2,
+#custom #info h3,
+#custom #info h4,
+#custom #info h5,
+#custom #info h6 {
+  text-transform: none;
 }
 
 #info #gist-url a,
