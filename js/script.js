@@ -23,7 +23,6 @@ if (!heading) heading = 'h2';
 var fontsize = getURLParameter('fontsize');
 if (fontsize) {
     $('#wrapper').css('font-size', fontsize + '%');
-    console.log(fontsize);
 }
 
 // let user specify selector if variations will be used
@@ -41,34 +40,48 @@ jQuery(document).ready(function() {
     // allow custom Gist
     var gist = getURLParameter('gist');
     var filename = getURLParameter('filename');
-    if (!gist) gist = 'd325f0e1bb629613622606f1e4765eda';
-    $.ajax({
-        url: 'https://api.github.com/gists/' + gist,
-        type: 'GET',
-        dataType: 'jsonp'
-    }).success(function(gistdata) {
-        var objects = [];
-        if (!filename) {
-            for (var file in gistdata.data.files) {
-                if (gistdata.data.files.hasOwnProperty(file)) {
-                    var o = gistdata.data.files[file].content;
-                    if (o) {
-                        objects.push(o);
+    if (!gist) {
+        $.ajax({
+            url : "README.md",
+            dataType: "text",
+            success : function (data) {
+                su_render(data);
+            }
+        });
+    } else {
+        $.ajax({
+            url: 'https://api.github.com/gists/' + gist,
+            type: 'GET',
+            dataType: 'jsonp'
+        }).success(function(gistdata) {
+            var objects = [];
+            if (!filename) {
+                for (var file in gistdata.data.files) {
+                    if (gistdata.data.files.hasOwnProperty(file)) {
+                        var o = gistdata.data.files[file].content;
+                        if (o) {
+                            objects.push(o);
+                        }
                     }
                 }
+            } else {
+                objects.push(gistdata.data.files[filename].content);
             }
-        }
-        else {
-            objects.push(gistdata.data.files[filename].content);
-        }
-        render(objects[0]);
+            su_render(objects[0]);
+        }).error(function(e) {
+            console.log('Error on ajax return.');
+        });
+    }
+    
+    function su_render(data) {
+        // fancy super user renderer function :)
+        render(data);
         render_sections();
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
-    }).error(function(e) {
-        console.log('Error on ajax return.');
-    });
+    }
+    
     
     // allow for custom CSS via Gist
     var css = getURLParameter('css');
@@ -240,8 +253,10 @@ jQuery(document).ready(function() {
             $('#info').toggle();
         });
         
-        var url = 'https://gist.github.com/' + gist;
-        $('#gist-url').html('<a href="' + url + '">' + gist + '</a>');
+        if (gist) {
+            var url = 'https://gist.github.com/' + gist;
+            $('#gist-url').html('<a href="' + url + '">' + gist + '</a>');
+        }
         
         // Add keypress to toggle info on '?' or 'h'
         $(document).keypress(function(e) {
@@ -270,8 +285,6 @@ jQuery(document).ready(function() {
         // add click event to items
         $( "#toc .toggle" ).click(function() {
             var name = $(this).parent().attr('href');
-            console.log("parent name: " + name);
-            console.log("parent hasclass hidden: " + $(this).parent().hasClass('hidden')  );
             // toggle hidden status
             if( $(this).parent().hasClass('hidden') ) {
                 $(name).show();
@@ -284,7 +297,8 @@ jQuery(document).ready(function() {
     }
     
     function render_extra () {
-        if (gist === 'd325f0e1bb629613622606f1e4765eda') $('#header h1').attr('id', 'title');
+        // add styling to header when viewing README file
+        if (!gist) $('#header h1').attr('id', 'title');
         $( ".section .toggle" ).click(function() {
             var name = $(this).parent().attr('name');
             $('#' + name).hide();
