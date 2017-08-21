@@ -171,6 +171,7 @@ kbd {
 
 #info a {
   color: #ff851b;
+  text-decoration: none;
 }
 
 #info a:hover {
@@ -182,7 +183,8 @@ kbd {
   font-size: 1.1em;
 }
 
-#info #gist-url a {
+#info #gist-url a,
+#info #css-url a {
   font-size: 0.9em;
 }
 
