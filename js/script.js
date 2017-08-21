@@ -1,36 +1,37 @@
-/* global $, jQuery, dragula, location, hljs */
+/* global $, jQuery, dragula, location, hljs, HtmlWhitelistedSanitizer */
 var TOC = [];
 var toggle_html='<span class="toggle">-</span>';
 
-    // get url parameters
-    // from http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript/11582513#11582513
-    function getURLParameter(name) {
-        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
-    }
-    
-    var showonly = getURLParameter('showonly');
-    if (!showonly) showonly = '';
-    var columns = getURLParameter('columns');
-    if (!columns) columns = 3;
-    
-    // let user select section heading and header tags
-    var header = getURLParameter('header');
-    if (!header) header = 'h1';
-    var heading = getURLParameter('heading');
-    if (!heading) heading = 'h2';
-    
-    // allow user to override fontsize
-    var fontsize = getURLParameter('fontsize');
-    if (!fontsize) fontsize = 110;
-    $('body').css('font-size', fontsize + '%');
-    
-    // let user specify selector if variations will be used
-    var variations = getURLParameter('variations');
-    if (!variations) variations = '';
+// get url parameters
+// from http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript/11582513#11582513
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
+}
+
+var showonly = getURLParameter('showonly');
+if (!showonly) showonly = '';
+var columns = getURLParameter('columns');
+if (!columns) columns = 3;
+
+// let user select section heading and header tags
+var header = getURLParameter('header');
+if (!header) header = 'h1';
+var heading = getURLParameter('heading');
+if (!heading) heading = 'h2';
+
+// allow user to override fontsize
+var fontsize = getURLParameter('fontsize');
+if (fontsize) {
+    $('#wrapper').css('font-size', fontsize + '%');
+    console.log(fontsize);
+}
+
+// let user specify selector if variations will be used
+var variations = getURLParameter('variations');
+if (!variations) variations = '';
 
 jQuery(document).ready(function() {
 
-    
     // get highlight.js style if provided
     var highlight = getURLParameter('highlight');
     if (!highlight) highlight = 'default';
@@ -124,7 +125,6 @@ jQuery(document).ready(function() {
                     }
                     catch (__) {}
                 }
-
                 return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
             }
         });
@@ -198,9 +198,7 @@ jQuery(document).ready(function() {
         }).on('drop', function (el) {
             // update toc
             render_toc_html();
-            
         });
-  
     }
     
     function columnize(columns) {
