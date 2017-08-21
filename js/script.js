@@ -297,8 +297,11 @@ jQuery(document).ready(function() {
     }
     
     function render_extra () {
+        
         // add styling to header when viewing README file
-        if (!gist) $('#header h1').attr('id', 'title');
+        if (!gist) $('#header h1').attr('id', 'title').addClass('cheats');
+        
+        // hide sections and toc reference when toggled
         $( ".section .toggle" ).click(function() {
             var name = $(this).parent().attr('name');
             $('#' + name).hide();
