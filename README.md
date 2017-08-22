@@ -27,7 +27,6 @@ Please note, printing of background graphics and colors is often disabled in bro
 
 ## Keyboard Commands
 <kbd>?</kbd> or <kbd>/</kbd> - Hide/show the Info panel.  
-<kbd>h</kbd> or <kbd>H</kbd> - Same as above but added for ease of use.
 
 ## Example Gists
 - [Alexa Cheats](https://ugotsta.github.io/cheats/?gist=2a06603706fd7c2eb5c93f34ed316354&variations=true) - Fun commands for Amazon Alexa.

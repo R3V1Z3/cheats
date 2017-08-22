@@ -415,17 +415,30 @@ jQuery(document).ready(function() {
         });
         
         // Key events
-        $(document).keypress(function(e) {
-            // ? or h
-            if( e.which == 104 || e.which == 63 || e.which == 72 || e.which == 47 ) {
+        $(document).keyup(function(e) {
+            if( e.which == 191 ) {
+                // ? or /
                 $('#info').toggle();
+            } else if (e.keyCode === 27) {
+                // Escape
+                $('.selector').hide();
+                console.log('Escape.');
             }
         });
         
-        $(document).keyup(function(e) {
-            if (e.keyCode === 27) {
-                $('.selector').hide();
-                console.log('Escape.');
+        $('#gist-input').keyup(function(e) {
+            if( e.which == 13 ) {
+                var uri = new URI();
+                uri.setQuery({ gist : $(this).val() });
+                window.location.href = uri;
+            }
+        });
+        
+        $('#css-input').keyup(function(e) {
+            if( e.which == 13 ) {
+                var uri = new URI();
+                uri.setQuery({ css : $(this).val() });
+                window.location.href = uri;
             }
         });
         
@@ -433,14 +446,14 @@ jQuery(document).ready(function() {
         $(document).click(function(event) {
             var id = event.target.id;
             if ( $('#gist-selector').is(':visible') ) {
-                if ( id === 'gist-url' || id === 'gist-selector' ) {
+                if ( id === 'gist-url' || id === 'gist-selector' || id === 'gist-input' ) {
                     console.log('gist-selector elements clicked');
                 } else {
                     $('#gist-selector').hide();
                 }
             }
             if ( $('#css-selector').is(':visible') ) {
-                if ( id === 'css-url' || id === 'css-selector' ) {
+                if ( id === 'css-url' || id === 'css-selector' || id === 'css-input' ) {
                     console.log('css-selector elements clicked');
                 } else {
                     $('#css-selector').hide();
