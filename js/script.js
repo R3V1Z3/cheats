@@ -8,6 +8,9 @@ function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
 
+
+var preprocess = getURLParameter('preprocess');
+if (!preprocess) preprocess = false;
 var showonly = getURLParameter('showonly');
 if (!showonly) showonly = '';
 var columns = getURLParameter('columns');
@@ -81,12 +84,59 @@ jQuery(document).ready(function() {
     
     function su_render(data) {
         // fancy super user renderer function :)
+        if( preprocess === 'true' ) {
+            data = preprocess(data);
+        }
         render(data);
         render_sections();
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
         register_events();
+    }
+    
+    function preprocess(data) {
+        var processed = '';
+        var lines = data.split('\n');
+        $.each(lines, function(){
+            var p = fix_faulty_markdown(this, '######');
+            if ( p === this ){
+                // no change, so continue header check
+                p = fix_faulty_markdown(this, '#####');
+            }
+            if ( p === this ){
+                p = fix_faulty_markdown(this, '####');
+            }
+            if ( p === this ){
+                p = fix_faulty_markdown(this, '###');
+            }
+            if ( p === this ){
+                p = fix_faulty_markdown(this, '##');
+            }
+            if ( p === this ){
+                p = fix_faulty_markdown(this, '#');
+            }
+            if ( p === this ){
+                p = fix_faulty_markdown(this, '-');
+            }
+            processed += p + '\n';
+        });
+        console.log (processed);
+        return processed;
+    }
+    
+    function fix_faulty_markdown(str, sequence) {
+        var l = sequence.length;
+        // get first l number of chars in str
+        var t = str.substr(0, l);
+        if ( t === sequence ) {
+            // found match, now test if subsequent char is space
+            var following = str.substr(l, 1);
+            if ( following !== ' ' ){
+                str = str.replace( sequence, sequence + ' ' );
+            }
+        }
+        return str;
     }
     
     
@@ -260,14 +310,17 @@ jQuery(document).ready(function() {
         var command_count = $('li').length;
         $('#command-count').html('Total commands: ' + command_count);
         
+        var url = '';
         if (gist) {
-            var url = 'https://gist.github.com/' + gist;
-            $('#gist-url').html('<a href="' + url + '">' + gist_filename + '</a>');
+            url = 'https://gist.github.com/' + gist;
+            $('#gist-details a').attr('href', url);
+            $('#gist-url').text(gist_filename);
         }
         
         if (css) {
-            url = 'https://gist.github.com/' + css;
-            $('#css-url').html('<a href="' + url + '">' + css_filename + '</a>');
+            url = 'https://gist.github.com/' + gist;
+            $('#css-details a').attr('href', url);
+            $('#css-url').text(css_filename);
         }
     }
     
@@ -345,16 +398,35 @@ jQuery(document).ready(function() {
     }
     
     function register_events() {
+        
         // event handler to toggle info panel
         $('#hide').click(function() {
             $('#info').toggle();
         });
+        
+        // close input panel when wrapper is clicked
+        $('#input-wrapper').on('click', function (e) {
+            if ( $(e.target).closest("#input-panel").length === 0 ) {
+                $(this).hide();
+            }
+        });
+        
+
         
         // Add keypress to toggle info on '?' or 'h'
         $(document).keypress(function(e) {
             if(e.which == 104 || e.which == 63 || e.which == 72 || e.which == 47) {
                 $('#info').toggle();
             }
+        });
+        
+        // show input wrapper when gist or css is clicked
+        $('#gist-url').click(function() {
+            //$('#input-wrapper').show();
+        });
+        
+        $('#css-url').click(function() {
+            //$('#input-wrapper').show();
         });
     }
 

@@ -1,5 +1,5 @@
-# Cheats
-Easily view and interact with cheatsheets using Markdown formatting. It relies on the free GitHub Gist service where you can easily create plain text files using Markdown syntax for formatting. Once you have a document created, access it using a special URL parameter as described below.
+# CHEATS
+Easily view and interact with cheatsheets hosted for free through GitHub Gist service, where you can easily create plain text files using Markdown syntax for formatting. Once you have a document created, view it through CHEATSheet using a special URL parameter as described below.
 
 ## The Basics
 An info panel will show in the top right corner (not available on mobile devices) that provides easy access to stats, a table of contents and some other helpful links.
@@ -32,7 +32,7 @@ Please note, printing of background graphics and colors is often disabled in bro
 ## Example Gists
 - [Alexa Cheats](https://ugotsta.github.io/cheats/?gist=2a06603706fd7c2eb5c93f34ed316354&variations=true) - Fun commands for Amazon Alexa.
 - [Screen Cheatsheet](https://ugotsta.github.io/cheats/?gist=af918e1618682638aa82) - Helpful commands for Screen.
-- [RegexCheatsheet](https://ugotsta.github.io/cheats/?gist=9e729e1f52cef218da9c9d6ce4bce7bb&heading=h1&header=h6) - Easy reference for regular expressions.
+- [Regular Express Cheatsheet](https://ugotsta.github.io/cheats/?gist=3893f6ac9447f7ee27fe) - Easy reference for regular expressions.
 - [Cucumber Cheatsheet](https://ugotsta.github.io/cheats/?gist=5728701&columns=2) - Tips and shortcuts for Cucumber testing tool.
 - [R Spacial Analysis](https://ugotsta.github.io/cheats/?css=e774fa60940e2dc452d78e8382798a2c&gist=fc661f26ef51eae6377b) - Spatial analysis notes in R language.
 

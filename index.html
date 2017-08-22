@@ -6,6 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <script src="//rawgit.com/bevacqua/dragula/master/dist/dragula.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//rawgit.com/bevacqua/dragula/master/dist/dragula.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/markdown-it/7.0.0/markdown-it.min.js"></script>
@@ -21,30 +25,37 @@
 </head>
 
 <body id="custom">
+    
+    <!-- Main container -->
     <div id="wrapper">
             <a href="https://github.com/Ugotsta/cheats/blob/master/cheats.md">
                 https://github.com/Ugotsta/cheats/blob/master/cheats.md</a>
     </div>
+    
+    <!-- Info panel -->
     <div id="info">
         <a href="https://github.com/Ugotsta/cheats/#cheats"><img style="position: absolute; top: 0; right: 0; border: 0;" src="//ugotsta.github.io/images/fork-white.png" alt="Fork me on GitHub"></a>
-        <h1 class="cheats">Cheats</h1>
+        <h1 class="cheats">CHEATS</h1>
         <div id="command-count">Total items:</div>
         </br>
         <div id="gist-details">
             View this file:</br>
-            <span id="gist-url"><a href="https://github.com/Ugotsta/cheats/blob/master/README.md">README.md</a></span>
+            <span id="gist-url">README.md</span>
+            <a href="https://github.com/Ugotsta/cheats/blob/master/README.md" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
         </div>
         <br/>
         <div id="css-details">
             CSS Theme:<br/>
-            <span id="css-url"><a href="https://github.com/Ugotsta/cheats/blob/master/css/style.css">Default (style.css)</a></span>
+            <span id="css-url">Default (style.css)</span>
+            <a href="https://github.com/Ugotsta/cheats/blob/master/css/style.css" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
         </div>
         <h3>Table of Contents</h3>
         <div id="toc">
             general
         </div>
-        <div id="hide"><span class="key">?</span> - show/hide this panel.</div>
-    </div></div>
+        <div id="hide"><kbd>?</kbd> - show/hide this panel.</div>
+    </div>
+    
     <script src="js/script.js"></script>
 </body>
 

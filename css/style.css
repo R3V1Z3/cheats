@@ -12,6 +12,7 @@ body, html {
   vertical-align: middle;
   background: transparent;
   font-family: 'Inconsolata', monospace;
+  text-shadow: none;
 }
 
 #wrapper {
@@ -24,6 +25,7 @@ body, html {
 #wrapper a {
   color: #6582C9;
   text-decoration: none;
+  text-shadow: none;
 }
 
 #wrapper a:hover {
@@ -36,6 +38,11 @@ code {
 
 pre {
   margin: 5px;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 pre.hljs {
@@ -166,7 +173,10 @@ kbd {
 
 #info * {
   font-family: 'Inconsolata', monospace;
+  text-shadow: none;
   color: #fff;
+  font-weight: normal;
+  line-height: 110%;
 }
 
 #info a {
@@ -196,6 +206,16 @@ kbd {
   font-size: 0.9em;
 }
 
+#info .fa {
+  font-family: 'FontAwesome';
+  color: #ff851b;
+  vertical-align: middle;
+}
+
+#info .fa:hover {
+  color: #fff;
+}
+
 #info #toc {
   max-height: 200px;
   overflow-y: scroll;
@@ -204,14 +224,22 @@ kbd {
   border-radius: 5px;
 }
 
-#info #toc a {
-  display: block;
+#info #toc a,
+#gist-url,
+#css-url {
+  display: inline;
   font-size: 0.85em;
-  margin-left: 10px;
   color: #ff851b;
+  cursor: pointer;
 }
 
-#info #toc a:hover {
+#info #toc a {
+  display: block;
+}
+
+#info #toc a:hover,
+#gist-url:hover,
+#css-url:hover {
   color: #ffffff;
 }
 
@@ -228,21 +256,15 @@ kbd {
   color: #ff851b;
 }
 
+#info kbd {
+  font-weight: bold;
+  color: #000;
+  font-size: 1em;
+}
+
 #info #hide:hover {
   color: #ffffff;
   cursor: pointer;
-}
-
-#info #hide:hover .key {
-  background-color: #ffffff;
-}
-
-#info #hide .key {
-  background-color: #ff851b;
-  border-radius: 50%;
-  padding: 0px 7px;
-  color: #000;
-  font-weight: bold;
 }
 
 .cheats:after {
@@ -250,6 +272,11 @@ kbd {
   padding-left: 2px;
   color: #ff851b;
   font-weight: bold;
+}
+
+form {
+  display: inline-block;
+  align-items: center;
 }
 
 /* Columns */
