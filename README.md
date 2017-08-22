@@ -41,6 +41,7 @@ https://ugotsta.github.io/cheats/?columns=2&fontsize=100
 - [R Spacial Analysis](https://ugotsta.github.io/cheats/?css=e774fa60940e2dc452d78e8382798a2c&gist=fc661f26ef51eae6377b) - Spatial analysis notes in R language.
 - [Markdown resources](https://ugotsta.github.io/cheats/?gist=eba62d45c82d0767a5a0&columns=2#citations) - A great showcase for Markdownit's rendering capabilities.
 - [An exhibit of Markdown](https://ugotsta.github.io/cheats/?gist=deb74713e6aff8fdfce2) - Another great showcase for Markdown rendering.
+- [Vim Cheatsheet](https://ugotsta.github.io/cheats/?gist=cc788aec683612125023ead01c7e1b5a) - Simple, intuitive cheatsheet for Vim
 
 ## Example CSS Themes
 - [Alexa Cheats](https://ugotsta.github.io/cheats/?&css=3340cb9dcb273289b51aef3570f5304d&variations=true) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).

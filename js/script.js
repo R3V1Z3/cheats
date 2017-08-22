@@ -483,6 +483,8 @@ jQuery(document).ready(function() {
                 prefix = '#css';
             }
             $(prefix + '-selector').toggle();
+            // move focus to text input
+            $(prefix + '-input').focus();
 
             // set position
             var p = $(this).position();
