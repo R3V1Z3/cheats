@@ -209,6 +209,19 @@ jQuery(document).ready(function() {
         $('#wrapper').html( md.render(content) );
     }
     
+    function css_name(str) {
+        str = str.toLowerCase();
+        // remove non-alphanumerics
+        str = str.replace(/[^a-z0-9_\s-]/g, '-');
+        // clean up multiple dashes or whitespaces
+        str = str.replace(/[\s-]+/g, ' ');
+        // remove leading and trailing spaces
+        str = str.trim();
+        // convert whitespaces and underscore to dash
+        str = str.replace(/[\s_]/g, '-');
+        return str;
+    }
+    
     function render_sections() {
         
         // header section
@@ -225,8 +238,9 @@ jQuery(document).ready(function() {
         // command sections
         $('#wrapper ' + heading).each(function() {
             // get content of heading
-            var name = $(this).text().toLowerCase().replace(/\s/g, "-");
-            name = name.replace(',', '');
+            // we need to ensure we have a css compatible name/id
+            var name = css_name( $(this).text() );
+            //name = name.replace(',', '');
             $(this).append(toggle_html);
             // add anchor link to make draggable
             $(this).wrapInner('<a class="handle" name="' + name + '"/>');
@@ -331,7 +345,7 @@ jQuery(document).ready(function() {
         var html = '';
         // iterate section classes and get id name to compose TOC
         $( '#commands .section' ).each(function() {
-            var name = $( this ).attr( 'id' );
+            var name = $(this).attr('id');
             var toggle_hidden = '';
             if ( $('#' + name).is(':hidden') ){
                 toggle_hidden ='class="hidden"';
