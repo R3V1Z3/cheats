@@ -1,4 +1,4 @@
-/* global $, jQuery, dragula, location, hljs, HtmlWhitelistedSanitizer */
+/* global $, jQuery, URI, dragula, location, hljs, HtmlWhitelistedSanitizer */
 var TOC = [];
 var toggle_html='<span class="toggle">-</span>';
 
@@ -7,7 +7,6 @@ var toggle_html='<span class="toggle">-</span>';
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
-
 
 var preprocess = getURLParameter('preprocess');
 if (!preprocess) preprocess = false;
@@ -93,8 +92,12 @@ jQuery(document).ready(function() {
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
         register_events();
+        
+        // hide selectors at start
+        $('#info .selector').hide();
     }
     
+    // to help with incorrectly formatted Markdown (which is very common)
     function preprocess(data) {
         var processed = '';
         var lines = data.split('\n');
@@ -411,8 +414,6 @@ jQuery(document).ready(function() {
             }
         });
         
-
-        
         // Add keypress to toggle info on '?' or 'h'
         $(document).keypress(function(e) {
             if(e.which == 104 || e.which == 63 || e.which == 72 || e.which == 47) {
@@ -422,11 +423,40 @@ jQuery(document).ready(function() {
         
         // show input wrapper when gist or css is clicked
         $('#gist-url').click(function() {
-            //$('#input-wrapper').show();
+            $('#gist-selector').toggle();
+            
+            // set position
+            var p = $(this).position();
+            $('#gist-selector').css({
+                top: p.top + $(this).height() + 10,
+                left: p.left - 50
+            });
+            
+            // create click events for links
+            $("#gist-selector a").click(function(event) {
+                var uri = new URI();
+                uri.setQuery({ gist: $(this).attr("id") });
+                window.location.href = uri;
+            });
+            
         });
         
         $('#css-url').click(function() {
-            //$('#input-wrapper').show();
+            $('#css-selector').toggle();
+            
+            // set position
+            var p = $(this).position();
+            $('#css-selector').css({
+                top: p.top + $(this).height() + 10,
+                left: p.left - 50
+            });
+            
+            // create click events for links
+            $("#css-selector a").click(function(event) {
+                var uri = new URI();
+                uri.setQuery({ css: $(this).attr("id") });
+                window.location.href = uri;
+            });
         });
     }
 
