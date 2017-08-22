@@ -317,13 +317,13 @@ jQuery(document).ready(function() {
         if (gist) {
             url = 'https://gist.github.com/' + gist;
             $('#gist-details a').attr('href', url);
-            $('#gist-url').text(gist_filename);
+            $('#gist-url').text('▼ ' + gist_filename);
         }
         
         if (css) {
-            url = 'https://gist.github.com/' + gist;
+            url = 'https://gist.github.com/' + css;
             $('#css-details a').attr('href', url);
-            $('#css-url').text(css_filename);
+            $('#css-url').text('▼ ' + css_filename);
         }
     }
     
