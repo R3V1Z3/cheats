@@ -34,6 +34,7 @@ Please note, printing of background graphics and colors is often disabled in bro
 - [Regular Express Cheatsheet](https://ugotsta.github.io/cheats/?gist=3893f6ac9447f7ee27fe) - Easy reference for regular expressions.
 - [Cucumber Cheatsheet](https://ugotsta.github.io/cheats/?gist=5728701&columns=2) - Tips and shortcuts for Cucumber testing tool.
 - [R Spacial Analysis](https://ugotsta.github.io/cheats/?css=e774fa60940e2dc452d78e8382798a2c&gist=fc661f26ef51eae6377b) - Spatial analysis notes in R language.
+- [Markdown resources](https://ugotsta.github.io/cheats/?gist=eba62d45c82d0767a5a0&columns=2#citations) - A great showcase for Markdownit's rendering capabilities.
 
 ## Example CSS Themes
 - [Vintage Western](https://ugotsta.github.io/cheats/?css=686ce03846004fd858579392ca0db2c1) - Straight out the old west.
