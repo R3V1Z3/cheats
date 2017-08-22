@@ -414,47 +414,64 @@ jQuery(document).ready(function() {
             }
         });
         
-        // Add keypress to toggle info on '?' or 'h'
+        // Key events
         $(document).keypress(function(e) {
-            if(e.which == 104 || e.which == 63 || e.which == 72 || e.which == 47) {
+            // ? or h
+            if( e.which == 104 || e.which == 63 || e.which == 72 || e.which == 47 ) {
                 $('#info').toggle();
             }
         });
         
-        // show input wrapper when gist or css is clicked
-        $('#gist-url').click(function() {
-            $('#gist-selector').toggle();
-            
-            // set position
-            var p = $(this).position();
-            $('#gist-selector').css({
-                top: p.top + $(this).height() + 10,
-                left: p.left - 50
-            });
-            
-            // create click events for links
-            $("#gist-selector a").click(function(event) {
-                var uri = new URI();
-                uri.setQuery({ gist: $(this).attr("id") });
-                window.location.href = uri;
-            });
-            
+        $(document).keyup(function(e) {
+            if (e.keyCode === 27) {
+                $('.selector').hide();
+                console.log('Escape.');
+            }
         });
         
-        $('#css-url').click(function() {
-            $('#css-selector').toggle();
-            
+        // hide selector if it or link not clicked
+        $(document).click(function(event) {
+            var id = event.target.id;
+            if ( $('#gist-selector').is(':visible') ) {
+                if ( id === 'gist-url' || id === 'gist-selector' ) {
+                    console.log('gist-selector elements clicked');
+                } else {
+                    $('#gist-selector').hide();
+                }
+            }
+            if ( $('#css-selector').is(':visible') ) {
+                if ( id === 'css-url' || id === 'css-selector' ) {
+                    console.log('css-selector elements clicked');
+                } else {
+                    $('#css-selector').hide();
+                }
+            }
+        });
+        
+        // Gist and CSS selectors
+        $('.selector-toggle').click(function() {
+            var prefix = '#gist';
+            var id = $(this).attr('id');
+            if ( id === 'css-url' ) {
+                prefix = '#css';
+            }
+            $(prefix + '-selector').toggle();
+
             // set position
             var p = $(this).position();
-            $('#css-selector').css({
+            $(prefix + '-selector').css({
                 top: p.top + $(this).height() + 10,
                 left: p.left - 50
             });
             
             // create click events for links
-            $("#css-selector a").click(function(event) {
+            $(prefix + '-selector span').click(function(event) {
                 var uri = new URI();
-                uri.setQuery({ css: $(this).attr("id") });
+                if ( prefix === '#gist' ){
+                    uri.setQuery({ gist : $(this).attr("id") });
+                } else {
+                    uri.setQuery({ css : $(this).attr("id") });
+                }
                 window.location.href = uri;
             });
         });

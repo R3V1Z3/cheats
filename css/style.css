@@ -294,16 +294,16 @@ form {
   cursor: pointer;
 }
 
-#info .selector a {
+#info .selector span {
   display: block;
   color: #000;
 }
 
-#info .selector a:hover {
+#info .selector span:hover {
   color: #ff851b;
 }
 
-#info .selector a:before {
+#info .selector span:before {
   content: "> ";
 }
 
