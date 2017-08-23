@@ -45,7 +45,7 @@ jQuery(document).ready(function() {
     // allow custom Gist
     var gist = getURLParameter('gist');
     var filename = getURLParameter('filename');
-    if (!gist) {
+    if ( !gist || gist === 'default' ) {
         $.ajax({
             url : "README.md",
             dataType: "text",
@@ -146,7 +146,7 @@ jQuery(document).ready(function() {
     // allow for custom CSS via Gist
     var css = getURLParameter('css');
     var cssfilename = getURLParameter('cssfilename');
-    if (css) {
+    if (css && css != 'default') {
         $.ajax({
             url: 'https://api.github.com/gists/' + css,
             type: 'GET',
