@@ -49,3 +49,4 @@ https://ugotsta.github.io/cheats/?columns=2&fontsize=100
 - [Corkboard](https://ugotsta.github.io/cheats/?css=ada930f9dae1d0a8d95f41cb7a56d658) - Lively corkboard theme with CSS pins.
 - [Alternating Colors](https://ugotsta.github.io/cheats/?css=e774fa60940e2dc452d78e8382798a2c) - Flat but colorful theme.
 - [Spacious](https://ugotsta.github.io/cheats/?css=160db22223834d33b08337cebbbba94e) - Spacious with subtle colors.
+- [Eerie](https://ugotsta.github.io/cheats/?css=7ac556b27c2cd34b00aa59e0d3621dea) - Eerie theme from [Eerie CSS](https://ugotsta.github.io/eerie-css/) project.

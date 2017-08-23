@@ -284,6 +284,12 @@ form {
   align-items: center;
 }
 
+#command-count code {
+    background: rgba(255,255,255,0.25);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
 /* Gist and CSS selector */
 #info .selector {
   position: absolute;
