@@ -324,8 +324,9 @@ jQuery(document).ready(function() {
         render_toc_html();
         
         // command count
-        var command_count = $('li').length;
-        $('#command-count').html('Total commands: ' + command_count);
+        var current = $('#command-count').text();
+        current = current.split(' total')[0];
+        render_count(current);
         
         var url = '';
         if (gist) {
@@ -414,7 +415,31 @@ jQuery(document).ready(function() {
         }
     }
     
+    function render_count(element) {
+        var count = $( element ).length;
+        $('#command-count').html('<code>' + element + '</code>' + ' total: ' + count);
+    }
+    
     function register_events() {
+        
+        // commmand count
+        $('#command-count').click(function() {
+            var count_array = ['.section','kbd','li','code'];
+            // get current count option
+            var current = $('#command-count').text();
+            current = current.split(' total')[0];
+            
+            // find current item in count_array
+            var x = count_array.indexOf(current);
+            // increment current item
+            if ( x === count_array.length - 1 ) {
+                x = 0;
+            } else {
+                x += 1;
+            }
+            current = count_array[x];
+            render_count(current);
+        });
         
         // event handler to toggle info panel
         $('#hide').click(function() {
