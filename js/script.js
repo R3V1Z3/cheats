@@ -416,7 +416,7 @@ jQuery(document).ready(function() {
     }
     
     function render_count(element) {
-        var count = $( element ).length;
+        var count = $( '#wrapper ' + element ).length;
         $('#command-count').html('<code>' + element + '</code>' + ' total: ' + count);
     }
     

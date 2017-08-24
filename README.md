@@ -36,7 +36,7 @@ https://ugotsta.github.io/cheats/?columns=2&fontsize=100
 ## Example Gists
 - [Alexa Cheats](https://ugotsta.github.io/cheats/?gist=2a06603706fd7c2eb5c93f34ed316354&variations=true) - Fun commands for Amazon Alexa.
 - [Screen Cheatsheet](https://ugotsta.github.io/cheats/?gist=af918e1618682638aa82) - Helpful commands for Screen.
-- [Regular Express Cheatsheet](https://ugotsta.github.io/cheats/?gist=3893f6ac9447f7ee27fe) - Easy reference for regular expressions.
+- [Regular Expression Cheatsheet](https://ugotsta.github.io/cheats/?gist=3893f6ac9447f7ee27fe) - Easy reference for regular expressions.
 - [Cucumber Cheatsheet](https://ugotsta.github.io/cheats/?gist=5728701&columns=2) - Tips and shortcuts for Cucumber testing tool.
 - [R Spacial Analysis](https://ugotsta.github.io/cheats/?css=e774fa60940e2dc452d78e8382798a2c&gist=fc661f26ef51eae6377b) - Spatial analysis notes in R language.
 - [Markdown resources](https://ugotsta.github.io/cheats/?gist=eba62d45c82d0767a5a0&columns=2#citations) - A great showcase for Markdownit's rendering capabilities.
