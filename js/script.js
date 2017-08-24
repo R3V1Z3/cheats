@@ -316,12 +316,14 @@ jQuery(document).ready(function() {
         }
         
         // make sections draggable
+        console.log('dragula reached');
         dragula( $('.column').toArray(),  {
             moves: function (el, container, handle) {
                 return handle.className === 'handle';
             }
         }).on('drop', function (el) {
             // update toc
+            console.log('drop method initiated');
             render_toc_html();
         });
     }
