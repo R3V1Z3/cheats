@@ -88,12 +88,8 @@ jQuery(document).ready(function() {
         }
         render(data);
         render_sections();
-        //postprocess();
-$('#wrapper').html(function(i, html) {
-    return html.replace(/<(|\/)kbd>/g, function(match) {
-        return match == '<kbd>' ? '<kbd>' : '';
-    });
-});
+        // replace <kbd> in text with html tag
+        tag_replace('kbd');
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
@@ -113,6 +109,14 @@ $('#wrapper').html(function(i, html) {
                 scrollTop: $(hash).offset().top
             });
         }
+    }
+    
+    function tag_replace(tag) {
+        var open = new RegExp('&lt;' + tag + '&gt;', 'gi');
+        var close = new RegExp('&lt;' + tag + '\/&gt;', 'gi');
+        var str = $('#wrapper').html();
+        str = str.replace(open, '<' + tag + '>').replace(close, '</' + tag + '>');
+        $('#wrapper').html(str);
     }
     
     // to help with incorrectly formatted Markdown (which is very common)
