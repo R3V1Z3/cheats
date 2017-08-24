@@ -108,9 +108,9 @@ jQuery(document).ready(function() {
         $('#wrapper').html(str);
         // update fontawesome icons
         if ( tag === 'i' ){
-            $('i').attr('class', function(_,classes) {
+            $('i').attr('class', function(_, classes) {
                 if( classes.indexOf('fa-') > -1 ){
-                    classes = css_name(klass);
+                    classes = css_name(classes);
                     classes = classes.replace(/(.*?)/, "fa-$1");
                 }
                 return classes;
