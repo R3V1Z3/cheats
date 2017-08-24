@@ -343,13 +343,13 @@ jQuery(document).ready(function() {
         var url = '';
         if (gist) {
             url = 'https://gist.github.com/' + gist;
-            $('#gist-details a').attr('href', url);
+            $('#gist-details a:first-child').attr('href', url);
             $('#gist-url').text('▼ ' + gist_filename);
         }
         
         if (css) {
             url = 'https://gist.github.com/' + css;
-            $('#css-details a').attr('href', url);
+            $('#css-details a:first-child').attr('href', url);
             $('#css-url').text('▼ ' + css_filename);
         }
     }
@@ -498,14 +498,12 @@ jQuery(document).ready(function() {
             var id = event.target.id;
             if ( $('#gist-selector').is(':visible') ) {
                 if ( id === 'gist-url' || id === 'gist-selector' || id === 'gist-input' ) {
-                    console.log('gist-selector elements clicked');
                 } else {
                     $('#gist-selector').hide();
                 }
             }
             if ( $('#css-selector').is(':visible') ) {
                 if ( id === 'css-url' || id === 'css-selector' || id === 'css-input' ) {
-                    console.log('css-selector elements clicked');
                 } else {
                     $('#css-selector').hide();
                 }
