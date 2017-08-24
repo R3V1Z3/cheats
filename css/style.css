@@ -141,6 +141,11 @@ kbd, #info kbd {
   box-shadow: inset 0 -1px 0 #959da5;
 }
 
+kbd:hover {
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+}
+
 /* Toggle buttons */
 
 .toggle {
