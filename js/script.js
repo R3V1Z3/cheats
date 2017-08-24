@@ -108,9 +108,12 @@ jQuery(document).ready(function() {
         $('#wrapper').html(str);
         // update fontawesome icons
         if ( tag === 'i' ){
-            $('i').attr('class', function(_,klass) {
-                klass = css_name(klass);
-                return klass.replace(/(.*?)/, "fa-$1");
+            $('i').attr('class', function(_,classes) {
+                if( classes.indexOf('fa-') > -1 ){
+                    classes = css_name(klass);
+                    classes = classes.replace(/(.*?)/, "fa-$1");
+                }
+                return classes;
             });
             $('i').addClass('fa');
         }
