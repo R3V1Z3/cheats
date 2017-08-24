@@ -93,6 +93,7 @@ jQuery(document).ready(function() {
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
+        draggable();
         jump_to_hash();
         register_events();
         
@@ -255,6 +256,20 @@ jQuery(document).ready(function() {
         return str;
     }
     
+    function draggable() {
+        // make sections draggable
+        console.log('dragula reached');
+        dragula( $('.column').toArray(),  {
+            moves: function (el, container, handle) {
+                return handle.className === 'handle';
+            }
+        }).on('drop', function (el) {
+            // update toc
+            console.log('drop method initiated');
+            render_toc_html();
+        });
+    }
+    
     function render_sections() {
         
         // header section
@@ -314,18 +329,6 @@ jQuery(document).ready(function() {
         if(showonly != '') {
             $('#' + showonly).siblings().hide();
         }
-        
-        // make sections draggable
-        console.log('dragula reached');
-        dragula( $('.column').toArray(),  {
-            moves: function (el, container, handle) {
-                return handle.className === 'handle';
-            }
-        }).on('drop', function (el) {
-            // update toc
-            console.log('drop method initiated');
-            render_toc_html();
-        });
     }
     
     function columnize(columns) {
