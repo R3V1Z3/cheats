@@ -305,8 +305,8 @@ form {
   box-shadow: 0 0 12px #000;
   padding: 10px;
   cursor: pointer;
-  border-right: 1px solid #555;
-  border-bottom: 1px solid #555;
+  border: none;
+  outline: 1px solid rgba(0,0,0,0.2);
 }
 
 #info .selector span {
