@@ -89,6 +89,7 @@ jQuery(document).ready(function() {
         render(data);
         render_sections();
         tag_replace('kbd');
+        tag_replace('i');
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
@@ -106,11 +107,13 @@ jQuery(document).ready(function() {
         str = str.replace(open, '<' + tag + '$1>').replace(close, '</' + tag + '>');
         $('#wrapper').html(str);
         // update fontawesome icons
-        $('i').addClass('fa');
-        $('i').attr('class', function(_,klass) {
-            klass = css_name(klass);
-            return klass.replace(/(.*?)/, "fa-$1");
-        });
+        if ( tag === 'i' ){
+            $('i').addClass('fa');
+            $('i').attr('class', function(_,klass) {
+                klass = css_name(klass);
+                return klass.replace(/(.*?)/, "fa-$1");
+            });
+        }
     }
     
     function jump_to_hash() {
