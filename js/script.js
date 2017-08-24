@@ -88,7 +88,7 @@ jQuery(document).ready(function() {
         }
         render(data);
         render_sections();
-        preprocess();
+        postprocess();
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
