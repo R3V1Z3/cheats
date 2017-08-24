@@ -113,7 +113,7 @@ jQuery(document).ready(function() {
     
     function tag_replace(tag) {
         var open = new RegExp('&lt;' + tag + '&gt;', 'gi');
-        var close = new RegExp('&lt;' + tag + '\/&gt;', 'gi');
+        var close = new RegExp('&lt;\/' + tag + '&gt;', 'gi');
         var str = $('#wrapper').html();
         str = str.replace(open, '<' + tag + '>').replace(close, '</' + tag + '>');
         $('#wrapper').html(str);
