@@ -223,7 +223,7 @@ jQuery(document).ready(function() {
     }
     
     function postprocess() {
-        var replace = text.replace(/\[kbd\]/g,'<kbd>').replace(/\[\/kbd\]/g,'</kbd>');
+        var replace = $('#wrapper').text().replace(/\[kbd\]/g,'<kbd>').replace(/\[\/kbd\]/g,'</kbd>');
         $('#wrapper').html(replace);
     }
     
