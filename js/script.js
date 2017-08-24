@@ -88,7 +88,6 @@ jQuery(document).ready(function() {
         }
         render(data);
         render_sections();
-        // replace <kbd> in text with html tag
         tag_replace('kbd');
         render_info();
         render_extra();
@@ -100,6 +99,20 @@ jQuery(document).ready(function() {
         $('#info .selector').hide();
     }
     
+    function tag_replace(tag) {
+        var open = new RegExp('&lt;' + tag + '(.*?)&gt;', 'gi');
+        var close = new RegExp('&lt;\/' + tag + '&gt;', 'gi');
+        var str = $('#wrapper').html();
+        str = str.replace(open, '<' + tag + '$1>').replace(close, '</' + tag + '>');
+        $('#wrapper').html(str);
+        // update fontawesome icons
+        $('i').addClass('fa');
+        $('i').attr('class', function(_,klass) {
+            klass = css_name(klass);
+            return klass.replace(/(.*?)/, "fa-$1");
+        });
+    }
+    
     function jump_to_hash() {
         // now with document rendered, jump to user provided url hash link
         var hash = new URI().hash();
@@ -109,14 +122,6 @@ jQuery(document).ready(function() {
                 scrollTop: $(hash).offset().top
             });
         }
-    }
-    
-    function tag_replace(tag) {
-        var open = new RegExp('&lt;' + tag + '&gt;', 'gi');
-        var close = new RegExp('&lt;\/' + tag + '&gt;', 'gi');
-        var str = $('#wrapper').html();
-        str = str.replace(open, '<' + tag + '>').replace(close, '</' + tag + '>');
-        $('#wrapper').html(str);
     }
     
     // to help with incorrectly formatted Markdown (which is very common)
