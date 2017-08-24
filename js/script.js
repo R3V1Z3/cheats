@@ -109,7 +109,7 @@ jQuery(document).ready(function() {
         // update fontawesome icons
         if ( tag === 'i' ){
             $('i').attr('class', function(_, classes) {
-                if( classes.indexOf('fa-') > -1 ){
+                if( classes.indexOf('fa-') < 0 ){
                     classes = css_name(classes);
                     classes = classes.replace(/(.*?)/, "fa-$1");
                 }
