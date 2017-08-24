@@ -88,7 +88,8 @@ jQuery(document).ready(function() {
         }
         render(data);
         render_sections();
-        postprocess();
+        //postprocess();
+        
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
@@ -220,11 +221,6 @@ jQuery(document).ready(function() {
             }
         });
         $('#wrapper').html( md.render(content) );
-    }
-    
-    function postprocess() {
-        var replace = $('#wrapper').text().replace(/\[kbd\]/g,'<kbd>').replace(/\[\/kbd\]/g,'</kbd>');
-        $('#wrapper').html(replace);
     }
     
     function css_name(str) {
