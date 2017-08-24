@@ -89,7 +89,11 @@ jQuery(document).ready(function() {
         render(data);
         render_sections();
         //postprocess();
-        
+$('#wrapper').html(function(i, html) {
+    return html.replace(/<(|\/)kbd>/g, function(match) {
+        return match == '<kbd>' ? '<kbd>' : '';
+    });
+});
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
