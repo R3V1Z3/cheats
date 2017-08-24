@@ -91,10 +91,22 @@ jQuery(document).ready(function() {
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
+        jump_to_hash();
         register_events();
         
         // hide selectors at start
         $('#info .selector').hide();
+    }
+    
+    function jump_to_hash() {
+        // now with document rendered, jump to user provided url hash link
+        var hash = new URI().hash();
+        if (hash) {
+            // scroll to location
+            $('body').animate({
+                scrollTop: $(hash).offset().top
+            }, 1000);
+        }
     }
     
     // to help with incorrectly formatted Markdown (which is very common)
