@@ -101,11 +101,11 @@ jQuery(document).ready(function() {
     function jump_to_hash() {
         // now with document rendered, jump to user provided url hash link
         var hash = new URI().hash();
-        if (hash) {
+        if( hash && $(hash).length > 0 ) {
             // scroll to location
             $('body').animate({
                 scrollTop: $(hash).offset().top
-            }, 1000);
+            });
         }
     }
     
@@ -255,7 +255,7 @@ jQuery(document).ready(function() {
             //name = name.replace(',', '');
             $(this).append(toggle_html);
             // add anchor link to make draggable
-            $(this).wrapInner('<a class="handle" name="' + name + '"/>');
+            $(this).wrapInner('<a class="handle" name="' + name + '" href="#' + name + '"/>');
             $(this).wrap('<div class="heading/>');
             $(this).nextUntil(heading).andSelf().wrapAll('<div class="section" id="' + name + '"/>');
             $(this).nextUntil(heading).wrapAll('<div class="content"/>');

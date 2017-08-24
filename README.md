@@ -26,7 +26,7 @@ URL paramaters available:
 - `variations` - set to true to allow variations in cheatsheets for Amazon Alexa commands.
 - `showonly` - a comma-separated string of sections to render.
 
-## Example URL Parameters
+## Example Parameters
 URL parameters can take effort to learn and use. Here are some examples to help simplify them.
 - Change number of columns to 1:  
 https://ugotsta.github.io/cheats/?columns=1
