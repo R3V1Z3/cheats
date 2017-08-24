@@ -33,17 +33,18 @@ body, html {
   text-decoration: underline;
 }
 
+#wrapper li,
+#wrapper pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 code {
   width: 100%;
 }
 
 pre {
   margin: 5px;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 
 pre.hljs {
