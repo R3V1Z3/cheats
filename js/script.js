@@ -353,13 +353,13 @@ jQuery(document).ready(function() {
         var url = '';
         if (gist) {
             url = 'https://gist.github.com/' + gist;
-            $('#gist-details a:first-child').attr('href', url);
+            $('#gist-source').attr('href', url);
             $('#gist-url').text('▼ ' + gist_filename);
         }
         
         if (css) {
             url = 'https://gist.github.com/' + css;
-            $('#css-details a:first-child').attr('href', url);
+            $('#css-source').attr('href', url);
             $('#css-url').text('▼ ' + css_filename);
         }
     }
