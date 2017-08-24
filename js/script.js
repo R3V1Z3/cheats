@@ -111,7 +111,7 @@ jQuery(document).ready(function() {
             $('i').attr('class', function(_, classes) {
                 if( classes.indexOf('fa-') < 0 ){
                     classes = css_name(classes);
-                    classes = classes.replace(/(.*?)/, "fa-$1");
+                    classes = classes.replace(/icon-(.*?)/, "fa-$1");
                 }
                 return classes;
             });
