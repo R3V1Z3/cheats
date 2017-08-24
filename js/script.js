@@ -46,6 +46,7 @@ jQuery(document).ready(function() {
     var gist = getURLParameter('gist');
     var filename = getURLParameter('filename');
     if ( !gist || gist === 'default' ) {
+        gist === 'default';
         $.ajax({
             url : "README.md",
             dataType: "text",
@@ -158,7 +159,6 @@ jQuery(document).ready(function() {
             }
             processed += p + '\n';
         });
-        console.log (processed);
         return processed;
     }
     
@@ -258,14 +258,12 @@ jQuery(document).ready(function() {
     
     function draggable() {
         // make sections draggable
-        console.log('dragula reached');
         dragula( $('.column').toArray(),  {
             moves: function (el, container, handle) {
                 return handle.className === 'handle';
             }
         }).on('drop', function (el) {
             // update toc
-            console.log('drop method initiated');
             render_toc_html();
         });
     }
@@ -413,7 +411,7 @@ jQuery(document).ready(function() {
     function render_extra () {
         
         // add styling to header when viewing README file
-        if (!gist) $('#header h1').attr('id', 'title').addClass('cheats');
+        if ( gist === 'default' ) $('#header h1').attr('id', 'title').addClass('cheats');
         
         // hide sections and toc reference when toggled
         $( ".section .toggle" ).click(function() {
@@ -499,7 +497,6 @@ jQuery(document).ready(function() {
             } else if (e.keyCode === 27) {
                 // Escape
                 $('.selector').hide();
-                console.log('Escape.');
             }
         });
         

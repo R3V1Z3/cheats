@@ -3,7 +3,7 @@
 
 /* General */
 
-body, html {
+* {
   margin: 0;
   padding: 0;
   border: 0;
@@ -22,21 +22,102 @@ body, html {
   padding: 0 20px;
 }
 
-#wrapper a {
+/* Header */
+
+#header {
+  margin: 20px 10px 0px 10px
+}
+
+a[name=header] {
+    font-size: 1.5em;
+}
+
+.cheats {
+  font-size: 1.5em;
+}
+
+.cheats:after {
+  content: 'heet';
+  padding-left: 2px;
+  color: #ff851b;
+  font-weight: bold;
+}
+
+/* Command sections */
+
+.section {
+  position: relative;
+  background-color: #234AAB;
+  margin: 20px 10px;
+  padding: 0;
+}
+
+a {
   color: #6582C9;
   text-decoration: none;
   text-shadow: none;
   word-wrap: break-word;
 }
 
-#wrapper a:hover {
+a:hover {
   text-decoration: underline;
 }
 
-#wrapper li,
-#wrapper pre {
+.section a.handle {
+  cursor: -webkit-grab;
+  color: #fff;
+  padding: 2px 6px;
+}
+
+.section .content {
+  background: rgba(255,255,255,0.75);
+}
+
+.section .alternate {
+  background: rgba(255,255,255,0.75);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 1em;
+}
+
+p {
+  margin: 0;
+}
+
+li,
+pre {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  padding: 2px 6px;
+  border-left: 2px solid rgba(0,0,0,0.25);
+  margin: 0px 6px;
+}
+
+li:nth-child(odd) {
+  background-color: rgba(255,255,255,0.15);
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(255,255,255,0.25);
+}
+
+table {
+  width: 100%;
+}
+
+th {
+    background-color: rgba(255,255,255,0.45);
+    text-align: left;
 }
 
 code {
@@ -51,82 +132,6 @@ pre.hljs {
   background: rgba(255,255,255,0.45);
 }
 
-/* Header */
-
-#header p a {
-  color: #aaa;
-}
-
-#header {
-  margin: 0px 20px;
-}
-
-/* Command sections */
-
-#commands .section {
-  background-color: #234AAB;
-  margin: 20px 10px;
-  padding: 0;
-}
-
-#wrapper .section a.handle {
-  cursor: -webkit-grab;
-  color: #fff;
-}
-
-.section h1,
-.section h2,
-.section h3,
-.section h4,
-.section h5,
-.section h6 {
-  margin: 0;
-  font-size: 1em;
-  padding: 2px 6px;
-}
-
-.section ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.section ul li {
-  padding: 2px 6px;
-  border-left: 2px solid rgba(0,0,0,0.25);
-  margin: 0px 6px;
-}
-
-.section li:nth-child(odd) {
-  background-color: rgba(255,255,255,0.15);
-}
-
-.section tr:nth-child(odd) {
-  background-color: rgba(255,255,255,0.25);
-}
-
-.section table {
-  width: 100%;
-}
-
-.section th {
-    background-color: rgba(255,255,255,0.45);
-    text-align: left;
-}
-
-.section p {
-  padding: 2px 6px;
-  margin: 0;
-}
-
-.section .content {
-  background: rgba(255,255,255,0.75);
-}
-
-.section .alternate {
-  background: rgba(255,255,255,0.75);
-}
-
 kbd, #info kbd {
   display: inline-block;
   padding: 3px 5px;
@@ -139,11 +144,11 @@ kbd, #info kbd {
   border-bottom-color: #959da5;
   border-radius: 3px;
   box-shadow: inset 0 -1px 0 #959da5;
+  cursor: pointer;
 }
 
 kbd:hover {
-  background: rgba(255,255,255,0.35);
-  cursor: pointer;
+  filter: invert(75%);
 }
 
 /* Toggle buttons */
@@ -165,6 +170,14 @@ kbd:hover {
 
 /* Info panel */
 
+#info * {
+  font-family: 'Inconsolata', monospace;
+  text-shadow: none;
+  color: #fff;
+  font-weight: normal;
+  line-height: 110%;
+}
+
 #info {
   background: rgba(0,0,0,0.9);
   position: fixed;
@@ -176,14 +189,6 @@ kbd:hover {
   box-shadow: -2px 2px 8px rgba(0,0,0,0.45);
   border-radius: 0px 0px 0px 10px;
   padding: 10px;
-}
-
-#info * {
-  font-family: 'Inconsolata', monospace;
-  text-shadow: none;
-  color: #fff;
-  font-weight: normal;
-  line-height: 110%;
 }
 
 #info a {
@@ -276,13 +281,6 @@ kbd:hover {
 #info #hide:hover {
   color: #ffffff;
   cursor: pointer;
-}
-
-.cheats:after {
-  content: 'heet';
-  padding-left: 2px;
-  color: #ff851b;
-  font-weight: bold;
 }
 
 form {
