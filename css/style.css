@@ -323,6 +323,10 @@ form {
   color: #fff;
 }
 
+#info .selector span {
+  margin-left: 6px;
+}
+
 #info .selector input {
   margin-bottom: 6px;
   width: 95%;

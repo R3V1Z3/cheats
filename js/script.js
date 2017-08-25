@@ -1,34 +1,31 @@
-/* global $, jQuery, URI, dragula, location, hljs, HtmlWhitelistedSanitizer */
+/* global $, jQuery, dragula, location, hljs, HtmlWhitelistedSanitizer, URLSearchParams, URL */
 var TOC = [];
 var toggle_html='<span class="toggle">-</span>';
 
-// get url parameters
-// from http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript/11582513#11582513
-function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
-}
+let params = (new URL(location)).searchParams;
+var path = window.location.pathname.split('index.html')[0];
 
-var preprocess = getURLParameter('preprocess');
+var preprocess = params.get('preprocess');
 if (!preprocess) preprocess = false;
-var showonly = getURLParameter('showonly');
+var showonly = params.get('showonly');
 if (!showonly) showonly = '';
-var columns = getURLParameter('columns');
+var columns = params.get('columns');
 if (!columns) columns = 3;
 
 // let user select section heading and header tags
-var header = getURLParameter('header');
+var header = params.get('header');
 if (!header) header = 'h1';
-var heading = getURLParameter('heading');
+var heading = params.get('heading');
 if (!heading) heading = 'h2';
 
 // allow user to override fontsize
-var fontsize = getURLParameter('fontsize');
+var fontsize = params.get('fontsize');
 if (fontsize) {
     $('#wrapper').css('font-size', fontsize + '%');
 }
 
 // let user specify selector if variations will be used
-var variations = getURLParameter('variations');
+var variations = params.get('variations');
 if (!variations) variations = '';
 
 var gist_filename = 'README.md';
@@ -37,24 +34,32 @@ var css_filename = 'Default';
 jQuery(document).ready(function() {
 
     // get highlight.js style if provided
-    var highlight = getURLParameter('highlight');
+    var highlight = params.get('highlight');
     if (!highlight) highlight = 'default';
     // add style reference to head to load it
     $('head').append('<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/' + highlight.replace(/[^a-zA-Z0-9-_]+/ig, '') + '.min.css">');
     
     // allow custom Gist
-    var gist = getURLParameter('gist');
-    var filename = getURLParameter('filename');
-    if ( !gist || gist === 'default' ) {
-        gist === 'default';
-        $.ajax({
-            url : "README.md",
-            dataType: "text",
-            success : function (data) {
+    var gist = params.get('gist');
+    var filename = params.get('filename');
+    
+    // start by loading README.md
+    $.ajax({
+        url : "README.md",
+        dataType: "text",
+        success : function (data) {
+            // README.md successfully pulled, grab examples from it
+            update_selectors(data);
+            if ( !gist || gist === 'default' ) {
+                gist === 'default';
                 su_render(data);
+            } else {
+                load_gist(gist);
             }
-        });
-    } else {
+        }
+    });
+    
+    function load_gist(gist){
         $.ajax({
             url: 'https://api.github.com/gists/' + gist,
             type: 'GET',
@@ -80,6 +85,53 @@ jQuery(document).ready(function() {
         }).error(function(e) {
             console.log('Error on ajax return.');
         });
+    }
+    
+    // get examples from README.md and render them to selectors
+    function update_selectors(data){
+        var processed = '';
+        var lines = data.split('\n');
+        var gist_found = false;
+        var css_found = false;
+        $.each( lines, function( i, val ) {
+            if ( val.indexOf('## Example Gists') != -1 ){
+                gist_found = true;
+                css_found = false;
+                processed = '<input id="gist-input" type="text" placeholder="Gist ID" />';
+                processed += '<a href="https://github.com' + path + 'blob/master/README.md" target="_blank">↪</a>';
+                processed += '<span id="default">Default (README.md)</span><br/>';
+            }
+            if ( val.indexOf('## Example CSS Themes') != -1 ){
+                // css section found so let update the gist selector with processed info
+                $('#gist-selector').html(processed);
+                processed = '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
+                processed += '<a href="https://github.com' + path + 'blob/master/css/style.css" target="_blank">↪</a>';
+                processed += '<span id="default">Default (style.css)</span><br/>';
+                css_found = true;
+                gist_found = false;
+            }
+            if ( val.indexOf('- [') != -1 ) {
+                if ( gist_found ){
+                    // item found and it's from gist example group
+                    var x = val.split(' [')[1];
+                    var name = x.split('](')[0];
+                    x = x.split('gist=')[1];
+                    var id = x.split( ') -' )[0];
+                    processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
+                    processed += '<span id="' + id + '">' + name + '</span><br/>';
+                } else if ( css_found ) {
+                    // item is from css example group
+                    var x = val.split('- [')[1];
+                    var name = x.split('](')[0];
+                    x = x.split('css=')[1];
+                    var id = x.split( ') -' )[0];
+                    processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
+                    processed += '<span id="' + id + '">' + name + '</span><br/>';
+                }
+            }
+            $('#css-selector').html(processed);
+        });
+        return processed;
     }
     
     function su_render(data) {
@@ -123,7 +175,7 @@ jQuery(document).ready(function() {
     
     function jump_to_hash() {
         // now with document rendered, jump to user provided url hash link
-        var hash = new URI().hash();
+        var hash = location.hash;
         if( hash && $(hash).length > 0 ) {
             // scroll to location
             $('body').animate({
@@ -136,26 +188,28 @@ jQuery(document).ready(function() {
     function preprocess(data) {
         var processed = '';
         var lines = data.split('\n');
-        $.each(lines, function(){
-            var p = fix_faulty_markdown(this, '######');
-            if ( p === this ){
+        $.each(lines, function( i, val ){
+            // problem with routine is due to use of 'this' keyword
+            // use val instead
+            var p = fix_faulty_markdown(val, '######');
+            if ( p === val ){
                 // no change, so continue header check
-                p = fix_faulty_markdown(this, '#####');
+                p = fix_faulty_markdown(val, '#####');
             }
-            if ( p === this ){
-                p = fix_faulty_markdown(this, '####');
+            if ( p === val ){
+                p = fix_faulty_markdown(val, '####');
             }
-            if ( p === this ){
-                p = fix_faulty_markdown(this, '###');
+            if ( p === val ){
+                p = fix_faulty_markdown(val, '###');
             }
-            if ( p === this ){
-                p = fix_faulty_markdown(this, '##');
+            if ( p === val ){
+                p = fix_faulty_markdown(val, '##');
             }
-            if ( p === this ){
-                p = fix_faulty_markdown(this, '#');
+            if ( p === val ){
+                p = fix_faulty_markdown(val, '#');
             }
-            if ( p === this ){
-                p = fix_faulty_markdown(this, '-');
+            if ( p === val ){
+                p = fix_faulty_markdown(val, '-');
             }
             processed += p + '\n';
         });
@@ -178,8 +232,8 @@ jQuery(document).ready(function() {
     
     
     // allow for custom CSS via Gist
-    var css = getURLParameter('css');
-    var cssfilename = getURLParameter('cssfilename');
+    var css = params.get('css');
+    var cssfilename = params.get('cssfilename');
     if (css && css != 'default') {
         $.ajax({
             url: 'https://api.github.com/gists/' + css,
@@ -492,7 +546,7 @@ jQuery(document).ready(function() {
         // Key events
         $(document).keyup(function(e) {
             if( e.which == 191 ) {
-                // ? or /
+                // ? for help
                 $('#info').toggle();
             } else if (e.keyCode === 27) {
                 // Escape
@@ -502,17 +556,15 @@ jQuery(document).ready(function() {
         
         $('#gist-input').keyup(function(e) {
             if( e.which == 13 ) {
-                var uri = new URI();
-                uri.setQuery({ gist : $(this).val() });
-                window.location.href = uri;
+                params.set( 'gist', $(this).val() );
+                window.location.href = uri();
             }
         });
         
         $('#css-input').keyup(function(e) {
             if( e.which == 13 ) {
-                var uri = new URI();
-                uri.setQuery({ css : $(this).val() });
-                window.location.href = uri;
+                params.set( 'css', $(this).val() );
+                window.location.href = uri();
             }
         });
         
@@ -553,15 +605,20 @@ jQuery(document).ready(function() {
             
             // create click events for links
             $(prefix + '-selector span').click(function(event) {
-                var uri = new URI();
                 if ( prefix === '#gist' ){
-                    uri.setQuery({ gist : $(this).attr("id") });
+                    params.set( 'gist', $(this).attr("id") );
                 } else {
-                    uri.setQuery({ css : $(this).attr("id") });
+                    params.set( 'css', $(this).attr("id") );
                 }
-                window.location.href = uri;
+                window.location.href = uri();
             });
         });
+        
+        function uri() {
+            var q = params.toString();
+            if ( q.length > 0 ) q = '?' + q;
+            return window.location.href.split('?')[0] + q + location.hash;
+        }
     }
 
 });
