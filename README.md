@@ -50,3 +50,4 @@ https://ugotsta.github.io/cheats/?columns=2&fontsize=100
 - [Alternating Colors](https://ugotsta.github.io/cheats/?css=e774fa60940e2dc452d78e8382798a2c) - Flat but colorful theme.
 - [Spacious](https://ugotsta.github.io/cheats/?css=160db22223834d33b08337cebbbba94e) - Spacious with subtle colors.
 - [Eerie](https://ugotsta.github.io/cheats/?css=7ac556b27c2cd34b00aa59e0d3621dea) - Eerie theme from [Eerie CSS](https://ugotsta.github.io/eerie-css/) project.
+- [Fiery Darkness](https://ugotsta.github.io/cheats/?c860958c04a53cd77575d5487ab1dec9) - Fiery red and yellow set against darkness.
