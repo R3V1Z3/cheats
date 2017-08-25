@@ -87,6 +87,38 @@ jQuery(document).ready(function() {
         });
     }
     
+    // allow for custom CSS via Gist
+    var css = params.get('css');
+    var cssfilename = params.get('cssfilename');
+    if (css && css != 'default') {
+        $.ajax({
+            url: 'https://api.github.com/gists/' + css,
+            type: 'GET',
+            dataType: 'jsonp'
+        }).success(function(gistdata) {
+            var objects = [];
+            if (!cssfilename) {
+                for (var file in gistdata.data.files) {
+                    if (gistdata.data.files.hasOwnProperty(file)) {
+                        // get filename
+                        css_filename = gistdata.data.files[file].filename;
+                        // get file contents
+                        var o = gistdata.data.files[file].content;
+                        if (o) {
+                            objects.push(o);
+                        }
+                    }
+                }
+            }
+            else {
+                objects.push(gistdata.data.files[filename].content);
+            }
+            render_css(objects[0]);
+        }).error(function(e) {
+            console.log('Error on ajax return.');
+        });
+    }
+    
     // get examples from README.md and render them to selectors
     function update_selectors(data){
         var processed = '';
@@ -134,8 +166,8 @@ jQuery(document).ready(function() {
         return processed;
     }
     
+    // fancy super user renderer function :)
     function su_render(data) {
-        // fancy super user renderer function :)
         if( preprocess === 'true' ) {
             data = preprocess(data);
         }
@@ -152,6 +184,51 @@ jQuery(document).ready(function() {
         
         // hide selectors at start
         $('#info .selector').hide();
+    }
+    
+    // to help with incorrectly formatted Markdown (which is very common)
+    function preprocess(data) {
+        var processed = '';
+        var lines = data.split('\n');
+        $.each(lines, function( i, val ){
+            console.log(p + ' | ' + this);
+            var p = fix_faulty_markdown(this, '######');
+            if ( p === this ){
+                // no change, so continue header check
+                p = fix_faulty_markdown(this, '#####');
+            }
+            // if ( p === this ){
+            //     p = fix_faulty_markdown(this, '####');
+            // }
+            // if ( p === this ){
+            //     p = fix_faulty_markdown(this, '###');
+            // }
+            // if ( p === this ){
+            //     p = fix_faulty_markdown(this, '##');
+            // }
+            // if ( p === this ){
+            //     p = fix_faulty_markdown(this, '#');
+            // }
+            if ( p === this ){
+                p = fix_faulty_markdown(this, '-');
+            }
+            processed += p + '\n';
+        });
+        return processed;
+    }
+    
+    function fix_faulty_markdown(str, sequence) {
+        var l = sequence.length;
+        // get first l number of chars in str
+        var t = str.substr(0, l);
+        if ( t === sequence ) {
+            // found match, now test if subsequent char is space
+            var following = str.substr(l, 1);
+            if ( following !== ' ' ){
+                str = str.replace( sequence, sequence + ' ' );
+            }
+        }
+        return str;
     }
     
     function tag_replace(tag) {
@@ -182,85 +259,6 @@ jQuery(document).ready(function() {
                 scrollTop: $(hash).offset().top
             });
         }
-    }
-    
-    // to help with incorrectly formatted Markdown (which is very common)
-    function preprocess(data) {
-        var processed = '';
-        var lines = data.split('\n');
-        $.each(lines, function( i, val ){
-            // problem with routine is due to use of 'this' keyword
-            // use val instead
-            var p = fix_faulty_markdown(val, '######');
-            if ( p === val ){
-                // no change, so continue header check
-                p = fix_faulty_markdown(val, '#####');
-            }
-            if ( p === val ){
-                p = fix_faulty_markdown(val, '####');
-            }
-            if ( p === val ){
-                p = fix_faulty_markdown(val, '###');
-            }
-            if ( p === val ){
-                p = fix_faulty_markdown(val, '##');
-            }
-            if ( p === val ){
-                p = fix_faulty_markdown(val, '#');
-            }
-            if ( p === val ){
-                p = fix_faulty_markdown(val, '-');
-            }
-            processed += p + '\n';
-        });
-        return processed;
-    }
-    
-    function fix_faulty_markdown(str, sequence) {
-        var l = sequence.length;
-        // get first l number of chars in str
-        var t = str.substr(0, l);
-        if ( t === sequence ) {
-            // found match, now test if subsequent char is space
-            var following = str.substr(l, 1);
-            if ( following !== ' ' ){
-                str = str.replace( sequence, sequence + ' ' );
-            }
-        }
-        return str;
-    }
-    
-    
-    // allow for custom CSS via Gist
-    var css = params.get('css');
-    var cssfilename = params.get('cssfilename');
-    if (css && css != 'default') {
-        $.ajax({
-            url: 'https://api.github.com/gists/' + css,
-            type: 'GET',
-            dataType: 'jsonp'
-        }).success(function(gistdata) {
-            var objects = [];
-            if (!cssfilename) {
-                for (var file in gistdata.data.files) {
-                    if (gistdata.data.files.hasOwnProperty(file)) {
-                        // get filename
-                        css_filename = gistdata.data.files[file].filename;
-                        // get file contents
-                        var o = gistdata.data.files[file].content;
-                        if (o) {
-                            objects.push(o);
-                        }
-                    }
-                }
-            }
-            else {
-                objects.push(gistdata.data.files[filename].content);
-            }
-            render_css(objects[0]);
-        }).error(function(e) {
-            console.log('Error on ajax return.');
-        });
     }
     
     function render_css(css) {
