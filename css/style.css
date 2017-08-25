@@ -15,9 +15,12 @@
   text-shadow: none;
 }
 
-html, body, #wrapper {
-  height: 100%;
+html {
   width: 100%;
+}
+
+body, html, #wrapper {
+  height:100%;
 }
 
 #wrapper {
@@ -179,6 +182,7 @@ kbd:hover {
   color: #fff;
   font-weight: normal;
   line-height: 110%;
+  text-transform: none;
 }
 
 #info {
@@ -205,15 +209,6 @@ kbd:hover {
 
 #info h1 {
   margin: 0;
-}
-
-#custom #info h1,
-#custom #info h2,
-#custom #info h3,
-#custom #info h4,
-#custom #info h5,
-#custom #info h6 {
-  text-transform: none;
 }
 
 #info #gist-url,
