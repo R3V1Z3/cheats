@@ -5,8 +5,8 @@ var toggle_html='<span class="toggle">-</span>';
 let params = (new URL(location)).searchParams;
 var path = window.location.pathname.split('index.html')[0];
 
-var preprocess = params.get('preprocess');
-if (!preprocess) preprocess = false;
+var preprocess = params.has('preprocess');
+
 var showonly = params.get('showonly');
 if (!showonly) showonly = '';
 var columns = params.get('columns');
@@ -119,6 +119,12 @@ jQuery(document).ready(function() {
         });
     }
     
+    // update index.html details so project can be safely forked without any changes
+    function update_index(){
+        var url = 'https://github.com' + path + '#cheats';
+        $('#github-fork').attr('href', url);
+    }
+    
     // get examples from README.md and render them to selectors
     function update_selectors(data){
         var processed = '';
@@ -168,7 +174,7 @@ jQuery(document).ready(function() {
     
     // fancy super user renderer function :)
     function su_render(data) {
-        if( preprocess === 'true' ) {
+        if( preprocess ) {
             data = preprocess(data);
         }
         render(data);
@@ -191,46 +197,38 @@ jQuery(document).ready(function() {
         var processed = '';
         var lines = data.split('\n');
         $.each(lines, function( i, val ){
-            console.log(p + ' | ' + this);
-            var p = fix_faulty_markdown(this, '######');
-            if ( p === this ){
-                // no change, so continue header check
-                p = fix_faulty_markdown(this, '#####');
+            // start by checking if # is the first character in the line
+            if ( val.charAt(0) === '#' ) {
+                var x = find_first_char_not('#', val);
+                if ( x > 0 ) {
+                    var c = val.charAt(x);
+                    // check if character is a space
+                    if (c != ' ') {
+                        var a = "I want apple"; // p
+                        var b = "an"; // ' '
+                        var position = 6; // x
+                        val = [val.slice(0, x), ' ', val.slice(x)].join('');
+                    }
+                }
             }
-            // if ( p === this ){
-            //     p = fix_faulty_markdown(this, '####');
-            // }
-            // if ( p === this ){
-            //     p = fix_faulty_markdown(this, '###');
-            // }
-            // if ( p === this ){
-            //     p = fix_faulty_markdown(this, '##');
-            // }
-            // if ( p === this ){
-            //     p = fix_faulty_markdown(this, '#');
-            // }
-            if ( p === this ){
-                p = fix_faulty_markdown(this, '-');
-            }
-            processed += p + '\n';
+            processed += val + '\n';
         });
         return processed;
     }
     
-    function fix_faulty_markdown(str, sequence) {
-        var l = sequence.length;
-        // get first l number of chars in str
-        var t = str.substr(0, l);
-        if ( t === sequence ) {
-            // found match, now test if subsequent char is space
-            var following = str.substr(l, 1);
-            if ( following !== ' ' ){
-                str = str.replace( sequence, sequence + ' ' );
+    // find first character in str that is not char and return its location
+    function find_first_char_not(char, str) {
+        for (var i = 0; i < str.length; i++){
+            if (str[i] != char){
+                return i;
             }
         }
-        return str;
+        // found only same char so return -1
+        return -1;
     }
     
+    // custom method to allow for certain tags like <i> and <kbd>
+    // extra security measures need to be taken here since we're allowing html
     function tag_replace(tag) {
         var open = new RegExp('&lt;' + tag + '(.*?)&gt;', 'gi');
         var close = new RegExp('&lt;\/' + tag + '&gt;', 'gi');
@@ -373,6 +371,9 @@ jQuery(document).ready(function() {
             }
         });
         
+        // add relevant classes to section headings
+        $('.section ' + heading).addClass('heading');
+        
         columnize(columns);
         
         // hide all other sections if showonly has been specified
@@ -416,18 +417,23 @@ jQuery(document).ready(function() {
         current = current.split(' total')[0];
         render_count(current);
         
+        // update gist and css urls
         var url = '';
         if (gist) {
             url = 'https://gist.github.com/' + gist;
-            $('#gist-source').attr('href', url);
             $('#gist-url').text('▼ ' + gist_filename);
+        } else {
+            url = 'https://github.com' + path + 'blob/master/README.md';
         }
+        $('#gist-source').attr('href', url);
         
         if (css) {
             url = 'https://gist.github.com/' + css;
-            $('#css-source').attr('href', url);
             $('#css-url').text('▼ ' + css_filename);
+        } else {
+            url = 'https://github.com' + path + 'blob/master/css/style.css';
         }
+        $('#css-source').attr('href', url);
     }
     
     function render_toc_html() {
