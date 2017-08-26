@@ -6,6 +6,7 @@ let params = (new URL(location)).searchParams;
 var path = window.location.pathname.split('index.html')[0];
 
 var preprocess = params.has('preprocess');
+// postprocess not showing as false for some reason at runtime?!?
 var postprocess = params.has('postprocess');
 
 var showonly = params.get('showonly');
@@ -182,7 +183,10 @@ jQuery(document).ready(function() {
         render_sections();
         tag_replace('kbd');
         tag_replace('i');
-        if( postprocess ) postprocess();
+        // something strange happening with this postprocess which should be boolean
+        if( params.has('postprocess') ) {
+            postprocess();
+        }
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
