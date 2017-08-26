@@ -540,6 +540,11 @@ jQuery(document).ready(function() {
             $('#info').toggle();
         });
         
+        // to help with mobile, show #info when header is clicked
+        $('#header').click(function() {
+            $('#info').show();
+        });
+        
         // close input panel when wrapper is clicked
         $('#input-wrapper').on('click', function (e) {
             if ( $(e.target).closest("#input-panel").length === 0 ) {
