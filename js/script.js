@@ -6,6 +6,7 @@ let params = (new URL(location)).searchParams;
 var path = window.location.pathname.split('index.html')[0];
 
 var preprocess = params.has('preprocess');
+var postprocess = params.has('postprocess');
 
 var showonly = params.get('showonly');
 if (!showonly) showonly = '';
@@ -181,6 +182,7 @@ jQuery(document).ready(function() {
         render_sections();
         tag_replace('kbd');
         tag_replace('i');
+        if( postprocess ) postprocess();
         render_info();
         render_extra();
         render_variations(variations); // used in voice assistant cheatsheets
@@ -190,6 +192,20 @@ jQuery(document).ready(function() {
         
         // hide selectors at start
         $('#info .selector').hide();
+    }
+    
+    function postprocess() {
+        // convert `` to kbd where needed
+        $('code').each(function(i, val) {
+            var content = $(this).text();
+            if( content.length < 11 ) {
+                var exclude = ["click", "right click"];
+                if( exclude.indexOf( content.toLowerCase() ) === -1 ) {
+                    content = $(this).text();
+                    $(this).replaceWith( '<kbd>' + content + '</kbd>' );
+                }
+            }
+        });
     }
     
     // to help with incorrectly formatted Markdown (which is very common)
@@ -204,11 +220,13 @@ jQuery(document).ready(function() {
                     var c = val.charAt(x);
                     // check if character is a space
                     if (c != ' ') {
-                        var a = "I want apple"; // p
-                        var b = "an"; // ' '
-                        var position = 6; // x
                         val = [val.slice(0, x), ' ', val.slice(x)].join('');
                     }
+                }
+            } else if ( val.charAt(0) === '-' ) {
+                // add space after - where needed
+                if ( val.charAt(1) != '-' && val.charAt(1) != ' ' ) {
+                    val = [val.slice(0, 1), ' ', val.slice(1)].join('');
                 }
             }
             processed += val + '\n';
