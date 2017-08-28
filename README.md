@@ -54,7 +54,7 @@ URL parameters can take effort to learn and use. Here are some examples to help 
 CHEATSheet is designed for use with [GitHub Pages](https://pages.github.com/) and made to be easily forked. This file contains hidden options for use when forked. 
 
 Options are hidden using HTML comment tags like so:
-```<!-- [options: hide_info=false, parameters_disallowed=fontsize|columns ] -->```
+```<!-- [options: hide_info=false, parameters_disallowed=css|header|heading] -->```
 
 Options available:
 - `hide_info` - makes the info panel totally inaccessible.
@@ -66,4 +66,4 @@ Options available:
 - `disable_hide` - disable hiding of the info panel.
 - `parameters_disallowed` - a list of URL parameters to disallow, separated by |
 
-<!-- [options: hide_info=false, parameters_disallowed=fontsize|columns ] -->
+<!-- [options: hide_info=false] -->

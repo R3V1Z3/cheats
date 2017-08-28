@@ -25,19 +25,15 @@ var param = {
     columns: 3,
     fontsize: 100,
     gist: 'default',
+    gist_filename: '',
     css: 'default',
+    cssfilename: '',
     highlight: 'default',
     variations: false,
     showonly: false,
     preprocess: false,
     postprocess: false
 };
-
-var gist = param['gist'];
-var css = param['css'];
-
-var gist_filename = 'default';
-var css_filename = 'default';
 
 jQuery(document).ready(function() {
     
@@ -53,17 +49,89 @@ jQuery(document).ready(function() {
                 // README.md successfully pulled, grab examples from it
                 pull_options(data);
                 extract_parameters( param );
+                var gist = param['gist'];
                 if ( !gist || gist === 'default' ) {
-                    gist === 'default';
+                    param['gist'] === 'default';
+                    load_css(param['css']);
                     su_render(data);
                 } else {
-                    load_gist(gist);
+                    load_gist(param['gist']);
                 }
             }
         });
     }
+    
+    // pull example content from README.md and render it to selectors
+    function pull_options(data){
+        var processed = '';
+        var lines = data.split('\n');
+        var gist_found = false;
+        var css_found = false;
+        var examples_end = 0;
+        $.each( lines, function( i, val ) {
+            // check for options without any block code ` on same line
+            if ( val.indexOf('<!-- [options:') != -1 && val.indexOf('`') === -1 ) {
+                // options found, lets get them
+                var o = val.split('<!-- [options:')[1];
+                o = o.split(',');
+                for ( var x = 0; x < o.length; x++) {
+                    var option = o[x].split('] -->')[0].trim();
+                    var key = option.split('=')[0];
+                    var value = option.split('=')[1];
+                    options[key] = value;
+                }
+            }
+            if ( examples_end != -1 ) {
+                if ( val.indexOf('## Example Gists') != -1 ){
+                    gist_found = true;
+                    css_found = false;
+                    processed = '<input id="gist-input" type="text" placeholder="Gist ID" />';
+                    processed += '<a href="https://github.com' + path + 'blob/master/README.md" target="_blank">↪</a>';
+                    processed += '<span id="default">Default (README.md)</span><br/>';
+                }
+                if ( val.indexOf('## Example CSS Themes') != -1 ){
+                    // css section found so let update the gist selector with processed info
+                    $('#gist-selector').html(processed);
+                    processed = '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
+                    processed += '<a href="https://github.com' + path + 'blob/master/css/style.css" target="_blank">↪</a>';
+                    processed += '<span id="default">Default (style.css)</span><br/>';
+                    css_found = true;
+                    gist_found = false;
+                    examples_end = 1;
+                }
+                if ( val.indexOf('- [') != -1 ) {
+                    if ( gist_found ){
+                        // item found and it's from gist example group
+                        var x = val.split(' [')[1];
+                        var name = x.split('](')[0];
+                        x = x.split('gist=')[1];
+                        var id = x.split( ') -' )[0];
+                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
+                        processed += '<span id="' + id + '">' + name + '</span><br/>';
+                    } else if ( css_found ) {
+                        examples_end++;
+                        // item is from css example group
+                        var x = val.split('- [')[1];
+                        var name = x.split('](')[0];
+                        x = x.split('css=')[1];
+                        var id = x.split( ') -' )[0];
+                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
+                        processed += '<span id="' + id + '">' + name + '</span><br/>';
+                    }
+                } else {
+                    // no more option found for current section, end of section
+                    if (css_found && examples_end > 1) {
+                        // set examples_end to -1 to stop further parsing
+                        examples_end = -1;
+                    }
+                }
+            }
+            $('#css-selector').html(processed);
+        });
+        return processed;
+    }
 
-    // Update param{} with URL parameters
+    // Update param[] with URL parameters
     function extract_parameters( param ) {
         for (var key in param) {
             if ( params.has(key) ) {
@@ -73,8 +141,6 @@ jQuery(document).ready(function() {
                 }
             }
         }
-        gist = param['gist'];
-        css = param['css'];
     }
     
     // Load any user specified Gist file
@@ -85,12 +151,12 @@ jQuery(document).ready(function() {
             dataType: 'jsonp'
         }).success(function(gistdata) {
             var objects = [];
-            var filename = param['filename'];
-            if ( filename != '' ) {
+            var gist_filename = param['gist_filename'];
+            if ( gist_filename === '' ) {
                 for (var file in gistdata.data.files) {
                     if (gistdata.data.files.hasOwnProperty(file)) {
                         // get gist filename
-                        gist_filename = gistdata.data.files[file].filename;
+                        param['gist_filename'] = gistdata.data.files[file].filename;
                         // get file contents
                         var o = gistdata.data.files[file].content;
                         if (o) {
@@ -99,10 +165,10 @@ jQuery(document).ready(function() {
                     }
                 }
             } else {
-                objects.push(gistdata.data.files[filename].content);
+                objects.push(gistdata.data.files[gist_filename].content);
             }
             su_render(objects[0]);
-            load_css(css);
+            load_css(param['css']);
         }).error(function(e) {
             console.log('Error on ajax return.');
         });
@@ -117,12 +183,12 @@ jQuery(document).ready(function() {
                 dataType: 'jsonp'
             }).success(function(gistdata) {
                 var objects = [];
-                var filename = param['cssfilename'];
-                if ( filename != '' ) {
+                var cssfilename = param['cssfilename'];
+                if ( cssfilename === '' ) {
                     for (var file in gistdata.data.files) {
                         if (gistdata.data.files.hasOwnProperty(file)) {
                             // get filename
-                            css_filename = gistdata.data.files[file].filename;
+                            param['cssfilename'] = gistdata.data.files[file].filename;
                             // get file contents
                             var o = gistdata.data.files[file].content;
                             if (o) {
@@ -130,9 +196,8 @@ jQuery(document).ready(function() {
                             }
                         }
                     }
-                }
-                else {
-                    objects.push(gistdata.data.files[css_filename].content);
+                } else {
+                    objects.push(gistdata.data.files[cssfilename].content);
                 }
                 render_css(objects[0]);
             }).error(function(e) {
@@ -289,75 +354,6 @@ jQuery(document).ready(function() {
         $('#github-fork').attr('href', url);
     }
     
-    // pull example content from README.md and render it to selectors
-    function pull_options(data){
-        var processed = '';
-        var lines = data.split('\n');
-        var gist_found = false;
-        var css_found = false;
-        var examples_end = 0;
-        $.each( lines, function( i, val ) {
-            if ( val.indexOf('<!-- [options:') != -1 ) {
-                // options found, lets get them
-                var o = val.split('<!-- [options:')[1];
-                o = o.split(',');
-                for ( var x = 0; x < o.length; x++) {
-                    var option = o[x].split('] -->')[0].trim();
-                    var key = option.split('=')[0];
-                    var value = option.split('=')[1];
-                    options[key] = value;
-                }
-            }
-            if ( examples_end != -1 ) {
-                if ( val.indexOf('## Example Gists') != -1 ){
-                    gist_found = true;
-                    css_found = false;
-                    processed = '<input id="gist-input" type="text" placeholder="Gist ID" />';
-                    processed += '<a href="https://github.com' + path + 'blob/master/README.md" target="_blank">↪</a>';
-                    processed += '<span id="default">Default (README.md)</span><br/>';
-                }
-                if ( val.indexOf('## Example CSS Themes') != -1 ){
-                    // css section found so let update the gist selector with processed info
-                    $('#gist-selector').html(processed);
-                    processed = '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
-                    processed += '<a href="https://github.com' + path + 'blob/master/css/style.css" target="_blank">↪</a>';
-                    processed += '<span id="default">Default (style.css)</span><br/>';
-                    css_found = true;
-                    gist_found = false;
-                    examples_end = 1;
-                }
-                if ( val.indexOf('- [') != -1 ) {
-                    if ( gist_found ){
-                        // item found and it's from gist example group
-                        var x = val.split(' [')[1];
-                        var name = x.split('](')[0];
-                        x = x.split('gist=')[1];
-                        var id = x.split( ') -' )[0];
-                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
-                        processed += '<span id="' + id + '">' + name + '</span><br/>';
-                    } else if ( css_found ) {
-                        examples_end++;
-                        // item is from css example group
-                        var x = val.split('- [')[1];
-                        var name = x.split('](')[0];
-                        x = x.split('css=')[1];
-                        var id = x.split( ') -' )[0];
-                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
-                        processed += '<span id="' + id + '">' + name + '</span><br/>';
-                    }
-                } else {
-                    // no more option found for current section, end of section
-                    if (css_found && examples_end > 1) {
-                        // set examples_end to -1 to stop further parsing
-                        examples_end = -1;
-                    }
-                }
-            }
-            $('#css-selector').html(processed);
-        });
-        return processed;
-    }
-    
     function postprocess() {
         // convert `` to kbd where needed
         $('code').each(function(i, val) {
@@ -458,20 +454,6 @@ jQuery(document).ready(function() {
         render_info();
     }
     
-    // helper function to ensure section ids are css compatible
-    function css_name(str) {
-        str = str.toLowerCase();
-        // remove non-alphanumerics
-        str = str.replace(/[^a-z0-9_\s-]/g, '-');
-        // clean up multiple dashes or whitespaces
-        str = str.replace(/[\s-]+/g, ' ');
-        // remove leading and trailing spaces
-        str = str.trim();
-        // convert whitespaces and underscore to dash
-        str = str.replace(/[\s_]/g, '-');
-        return str;
-    }
-    
     function draggable() {
         // make sections draggable
         dragula( $('.column').toArray(),  {
@@ -496,17 +478,17 @@ jQuery(document).ready(function() {
         
         // update gist and css urls
         var url = '';
-        if (gist) {
-            url = 'https://gist.github.com/' + gist;
-            $('#gist-url').text('▼ ' + gist_filename);
+        if (param['gist'] != 'default') {
+            url = 'https://gist.github.com/' + param['gist'];
+            $('#gist-url').text('▼ ' + param['gist_filename']);
         } else {
             url = 'https://github.com' + path + 'blob/master/README.md';
         }
         $('#gist-source').attr('href', url);
         
-        if (css) {
-            url = 'https://gist.github.com/' + css;
-            $('#css-url').text('▼ ' + css_filename);
+        if (param['css'] != 'default') {
+            url = 'https://gist.github.com/' + param['css'];
+            $('#css-url').text('▼ ' + param['cssfilename']);
         } else {
             url = 'https://github.com' + path + 'blob/master/css/style.css';
         }
@@ -546,7 +528,7 @@ jQuery(document).ready(function() {
     function render_extra () {
         
         // add styling to header when viewing README file
-        if ( gist === 'default' ) $('#header h1').attr('id', 'title').addClass('cheats');
+        if ( param['gist'] === 'default' ) $('#header h1').attr('id', 'title').addClass('cheats');
         
         // hide sections and toc reference when toggled
         $( ".section .toggle" ).click(function() {
@@ -699,12 +681,27 @@ jQuery(document).ready(function() {
                 window.location.href = uri();
             });
         });
-        
-        function uri() {
-            var q = params.toString();
-            if ( q.length > 0 ) q = '?' + q;
-            return window.location.href.split('?')[0] + q + location.hash;
-        }
+    }
+    
+    // helper function for combining url parts
+    function uri() {
+        var q = params.toString();
+        if ( q.length > 0 ) q = '?' + q;
+        return window.location.href.split('?')[0] + q + location.hash;
+    }
+    
+    // helper function to ensure section ids are css compatible
+    function css_name(str) {
+        str = str.toLowerCase();
+        // remove non-alphanumerics
+        str = str.replace(/[^a-z0-9_\s-]/g, '-');
+        // clean up multiple dashes or whitespaces
+        str = str.replace(/[\s-]+/g, ' ');
+        // remove leading and trailing spaces
+        str = str.trim();
+        // convert whitespaces and underscore to dash
+        str = str.replace(/[\s_]/g, '-');
+        return str;
     }
 
 });
