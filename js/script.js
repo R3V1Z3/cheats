@@ -2,65 +2,82 @@
 var TOC = [];
 var toggle_html='<span class="toggle">-</span>';
 
+// get URL parameters
 let params = (new URL(location)).searchParams;
 var path = window.location.pathname.split('index.html')[0];
 
-var preprocess = params.has('preprocess');
-// postprocess not showing as false for some reason at runtime?!?
-var postprocess = params.has('postprocess');
+// set default options
+var options = {
+    hide_info: false,
+    hide_github_fork: false,
+    hide_command_count: false,
+    hide_gist_details: false,
+    hide_css_details: false,
+    hide_toc: false,
+    disable_hide: false,
+    parameters_disallowed: ''
+};
 
-var showonly = params.get('showonly');
-if (!showonly) showonly = '';
-var columns = params.get('columns');
-if (!columns) columns = 3;
+// set defaults for param which holds list of URL parameters
+var param = {
+    header: 'h1',
+    heading: 'h2',
+    columns: 3,
+    fontsize: 100,
+    gist: 'default',
+    css: 'default',
+    highlight: 'default',
+    variations: false,
+    showonly: false,
+    preprocess: false,
+    postprocess: false
+};
 
-// let user select section heading and header tags
-var header = params.get('header');
-if (!header) header = 'h1';
-var heading = params.get('heading');
-if (!heading) heading = 'h2';
+var gist = param['gist'];
+var css = param['css'];
 
-// allow user to override fontsize
-var fontsize = params.get('fontsize');
-if (fontsize) {
-    $('#wrapper').css('font-size', fontsize + '%');
-}
-
-// let user specify selector if variations will be used
-var variations = params.get('variations');
-if (!variations) variations = '';
-
-var gist_filename = 'README.md';
-var css_filename = 'Default';
+var gist_filename = 'default';
+var css_filename = 'default';
 
 jQuery(document).ready(function() {
+    
+    main();
+    
+    // Starting point
+    function main() {
+        // Start by loading README.md file to get options and potentially content
+        $.ajax({
+            url : "README.md",
+            dataType: "text",
+            success : function (data) {
+                // README.md successfully pulled, grab examples from it
+                pull_options(data);
+                extract_parameters( param );
+                if ( !gist || gist === 'default' ) {
+                    gist === 'default';
+                    su_render(data);
+                } else {
+                    load_gist(gist);
+                }
+            }
+        });
+    }
 
-    // get highlight.js style if provided
-    var highlight = params.get('highlight');
-    if (!highlight) highlight = 'default';
-    // add style reference to head to load it
-    $('head').append('<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/' + highlight.replace(/[^a-zA-Z0-9-_]+/ig, '') + '.min.css">');
-    
-    // allow custom Gist
-    var gist = params.get('gist');
-    var filename = params.get('filename');
-    
-    // start by loading README.md
-    $.ajax({
-        url : "README.md",
-        dataType: "text",
-        success : function (data) {
-            // README.md successfully pulled, grab examples from it
-            update_selectors(data);
-            if ( !gist || gist === 'default' ) {
-                gist === 'default';
-                su_render(data);
-            } else {
-                load_gist(gist);
+    // Update param{} with URL parameters
+    function extract_parameters( param ) {
+        for (var key in param) {
+            if ( params.has(key) ) {
+                // ensure the parameter is allowed
+                if ( options['parameters_disallowed'].indexOf(key) === -1 ) {
+                    param[key] = params.get(key);
+                }
             }
         }
-    });
+        gist = param['gist'];
+        css = param['css'];
+    }
     
+    // Load any user specified Gist file
     function load_gist(gist){
         $.ajax({
             url: 'https://api.github.com/gists/' + gist,
@@ -68,7 +85,8 @@ jQuery(document).ready(function() {
             dataType: 'jsonp'
         }).success(function(gistdata) {
             var objects = [];
-            if (!filename) {
+            var filename = param['filename'];
+            if ( filename != '' ) {
                 for (var file in gistdata.data.files) {
                     if (gistdata.data.files.hasOwnProperty(file)) {
                         // get gist filename
@@ -84,40 +102,184 @@ jQuery(document).ready(function() {
                 objects.push(gistdata.data.files[filename].content);
             }
             su_render(objects[0]);
+            load_css(css);
         }).error(function(e) {
             console.log('Error on ajax return.');
         });
     }
     
-    // allow for custom CSS via Gist
-    var css = params.get('css');
-    var cssfilename = params.get('cssfilename');
-    if (css && css != 'default') {
-        $.ajax({
-            url: 'https://api.github.com/gists/' + css,
-            type: 'GET',
-            dataType: 'jsonp'
-        }).success(function(gistdata) {
-            var objects = [];
-            if (!cssfilename) {
-                for (var file in gistdata.data.files) {
-                    if (gistdata.data.files.hasOwnProperty(file)) {
-                        // get filename
-                        css_filename = gistdata.data.files[file].filename;
-                        // get file contents
-                        var o = gistdata.data.files[file].content;
-                        if (o) {
-                            objects.push(o);
+    function load_css(css) {
+        // allow for custom CSS via Gist
+        if ( css != 'default' && css != '' ) {
+            $.ajax({
+                url: 'https://api.github.com/gists/' + css,
+                type: 'GET',
+                dataType: 'jsonp'
+            }).success(function(gistdata) {
+                var objects = [];
+                var filename = param['cssfilename'];
+                if ( filename != '' ) {
+                    for (var file in gistdata.data.files) {
+                        if (gistdata.data.files.hasOwnProperty(file)) {
+                            // get filename
+                            css_filename = gistdata.data.files[file].filename;
+                            // get file contents
+                            var o = gistdata.data.files[file].content;
+                            if (o) {
+                                objects.push(o);
+                            }
                         }
                     }
                 }
+                else {
+                    objects.push(gistdata.data.files[css_filename].content);
+                }
+                render_css(objects[0]);
+            }).error(function(e) {
+                console.log('Error on ajax return.');
+            });
+        }
+    }
+    
+    // Start content rendering process
+    function su_render(data) {
+        if( param['preprocess'] ) {
+            data = preprocess(data);
+        }
+        render(data);
+        render_sections();
+        $('#wrapper').css('font-size', param['fontsize'] + '%');
+        get_highlight_style();
+        tag_replace('kbd');
+        tag_replace('i');
+        if( params.has('postprocess') ) {
+            postprocess();
+        }
+        render_info();
+        update_index();
+        render_extra();
+        render_variations(param['variations']); // used in voice assistant cheatsheets
+        draggable();
+        jump_to_hash();
+        register_events();
+        
+        // hide selectors at start
+        $('#info .selector').hide();
+    }
+    
+    function render(content) {
+        
+        var md = window.markdownit({
+            html: false, // Enable HTML tags in source
+            xhtmlOut: true, // Use '/' to close single tags (<br />).
+            breaks: true, // Convert '\n' in paragraphs into <br>
+            langPrefix: 'language-', // CSS language prefix for fenced blocks.
+            linkify: true,
+            typographer: true,
+            quotes: '“”‘’',
+            highlight: function(str, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return '<pre class="hljs"><code>' +
+                            hljs.highlight(lang, str, true).value +
+                            '</code></pre>';
+                    }
+                    catch (__) {}
+                }
+                return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
             }
-            else {
-                objects.push(gistdata.data.files[filename].content);
+        });
+        $('#wrapper').html( md.render(content) );
+    }
+    
+    function render_sections() {
+        
+        // header section
+        var header = param['header'];
+        var heading = param['heading'];
+        if ( $('#wrapper ' + header).length ) {
+            $('#wrapper ' + header).each(function() {
+                $(this).nextUntil(heading).andSelf().wrapAll('<section id="header"/>');
+                $(this).wrapInner('<a name="header"/>');
+            });
+        } else {
+            //no header, so we'll add an empty one
+            $('#wrapper').prepend('<section id="header"></section>');
+        }
+        
+        // command sections
+        $('#wrapper ' + heading).each(function() {
+            // get content of heading
+            // we need to ensure we have a css compatible name/id
+            var name = css_name( $(this).text() );
+            //name = name.replace(',', '');
+            $(this).append(toggle_html);
+            // add anchor link to make draggable
+            $(this).wrapInner('<a class="handle" name="' + name + '" href="#' + name + '"/>');
+            $(this).wrap('<div class="heading/>');
+            $(this).nextUntil(heading).andSelf().wrapAll('<div class="section" id="' + name + '"/>');
+            $(this).nextUntil(heading).wrapAll('<div class="content"/>');
+        });
+        
+        // wrap all command sections in new section
+        // can't use #header since there's a header in the info panel
+        $('#header').siblings().wrapAll('<section id="commands"/>');
+        
+        // add alternate classes to paragraphs
+        var counter = 0;
+        $('.content').children().each(function() {
+            if ( $( this ).is('p') ) {
+                if (counter === 0) {
+                    $(this).addClass('alternate');
+                    // check previous element and add 'alternative' class as needed
+                    var $prev = $(this).prev();
+                    if ( $prev.is('h1') || $prev.is('h2') || $prev.is('h3') || $prev.is('h4') || $prev.is('h5') || $prev.is('h6')) {
+                        $prev.addClass('alternate');
+                    }
+                    // check next element and add 'alternative' class as needed
+                    var $next = $(this).next();
+                    if ( $next.is('ul') || $next.is('blockquote') || $next.is('code')  || $next.is('pre') ) {
+                        $next.addClass('alternate');
+                    }
+                }
+                counter += 1;
+                if (counter === 2) counter = 0;
             }
-            render_css(objects[0]);
-        }).error(function(e) {
-            console.log('Error on ajax return.');
+        });
+        
+        // add relevant classes to section headings
+        $('.section ' + heading).addClass('heading');
+        
+        columnize( param['columns'] );
+        
+        // hide all other sections if showonly has been specified
+        if( param['showonly'] != '') {
+            $('#' + param['showonly']).siblings().hide();
+        }
+    }
+    
+    function columnize(columns) {
+        // begin by wrapping all sections in first column
+        $('#commands .section').wrapAll('<div class="column column1of' + columns + '" id="column1"/>');
+        if( columns < 2 || columns > 4 ) {
+            return;
+        }
+        for (var i=2; i <= columns; i++) {
+            $('#commands').append('<div class="column column1of' + columns + '" id="column' + i + '"/>');
+        }
+        
+        var column_counter = 1;
+        
+        // iterate sections
+        $('#commands .section').each(function() {
+            if( column_counter > 1 ) {
+                // move this section to next column
+                $(this).detach().appendTo('#column' + column_counter);
+            }
+            column_counter += 1;
+            if( column_counter > columns ) {
+                column_counter = 1;
+            }
         });
     }
     
@@ -127,75 +289,73 @@ jQuery(document).ready(function() {
         $('#github-fork').attr('href', url);
     }
     
-    // get examples from README.md and render them to selectors
-    function update_selectors(data){
+    // pull example content from README.md and render it to selectors
+    function pull_options(data){
         var processed = '';
         var lines = data.split('\n');
         var gist_found = false;
         var css_found = false;
+        var examples_end = 0;
         $.each( lines, function( i, val ) {
-            if ( val.indexOf('## Example Gists') != -1 ){
-                gist_found = true;
-                css_found = false;
-                processed = '<input id="gist-input" type="text" placeholder="Gist ID" />';
-                processed += '<a href="https://github.com' + path + 'blob/master/README.md" target="_blank">↪</a>';
-                processed += '<span id="default">Default (README.md)</span><br/>';
+            if ( val.indexOf('<!-- [options:') != -1 ) {
+                // options found, lets get them
+                var o = val.split('<!-- [options:')[1];
+                o = o.split(',');
+                for ( var x = 0; x < o.length; x++) {
+                    var option = o[x].split('] -->')[0].trim();
+                    var key = option.split('=')[0];
+                    var value = option.split('=')[1];
+                    options[key] = value;
+                }
             }
-            if ( val.indexOf('## Example CSS Themes') != -1 ){
-                // css section found so let update the gist selector with processed info
-                $('#gist-selector').html(processed);
-                processed = '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
-                processed += '<a href="https://github.com' + path + 'blob/master/css/style.css" target="_blank">↪</a>';
-                processed += '<span id="default">Default (style.css)</span><br/>';
-                css_found = true;
-                gist_found = false;
-            }
-            if ( val.indexOf('- [') != -1 ) {
-                if ( gist_found ){
-                    // item found and it's from gist example group
-                    var x = val.split(' [')[1];
-                    var name = x.split('](')[0];
-                    x = x.split('gist=')[1];
-                    var id = x.split( ') -' )[0];
-                    processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
-                    processed += '<span id="' + id + '">' + name + '</span><br/>';
-                } else if ( css_found ) {
-                    // item is from css example group
-                    var x = val.split('- [')[1];
-                    var name = x.split('](')[0];
-                    x = x.split('css=')[1];
-                    var id = x.split( ') -' )[0];
-                    processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
-                    processed += '<span id="' + id + '">' + name + '</span><br/>';
+            if ( examples_end != -1 ) {
+                if ( val.indexOf('## Example Gists') != -1 ){
+                    gist_found = true;
+                    css_found = false;
+                    processed = '<input id="gist-input" type="text" placeholder="Gist ID" />';
+                    processed += '<a href="https://github.com' + path + 'blob/master/README.md" target="_blank">↪</a>';
+                    processed += '<span id="default">Default (README.md)</span><br/>';
+                }
+                if ( val.indexOf('## Example CSS Themes') != -1 ){
+                    // css section found so let update the gist selector with processed info
+                    $('#gist-selector').html(processed);
+                    processed = '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
+                    processed += '<a href="https://github.com' + path + 'blob/master/css/style.css" target="_blank">↪</a>';
+                    processed += '<span id="default">Default (style.css)</span><br/>';
+                    css_found = true;
+                    gist_found = false;
+                    examples_end = 1;
+                }
+                if ( val.indexOf('- [') != -1 ) {
+                    if ( gist_found ){
+                        // item found and it's from gist example group
+                        var x = val.split(' [')[1];
+                        var name = x.split('](')[0];
+                        x = x.split('gist=')[1];
+                        var id = x.split( ') -' )[0];
+                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
+                        processed += '<span id="' + id + '">' + name + '</span><br/>';
+                    } else if ( css_found ) {
+                        examples_end++;
+                        // item is from css example group
+                        var x = val.split('- [')[1];
+                        var name = x.split('](')[0];
+                        x = x.split('css=')[1];
+                        var id = x.split( ') -' )[0];
+                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
+                        processed += '<span id="' + id + '">' + name + '</span><br/>';
+                    }
+                } else {
+                    // no more option found for current section, end of section
+                    if (css_found && examples_end > 1) {
+                        // set examples_end to -1 to stop further parsing
+                        examples_end = -1;
+                    }
                 }
             }
             $('#css-selector').html(processed);
         });
         return processed;
-    }
-    
-    // fancy super user renderer function :)
-    function su_render(data) {
-        if( preprocess ) {
-            data = preprocess(data);
-        }
-        render(data);
-        render_sections();
-        tag_replace('kbd');
-        tag_replace('i');
-        // something strange happening with this postprocess which should be boolean
-        if( params.has('postprocess') ) {
-            postprocess();
-        }
-        render_info();
-        render_extra();
-        render_variations(variations); // used in voice assistant cheatsheets
-        draggable();
-        jump_to_hash();
-        register_events();
-        
-        // hide selectors at start
-        $('#info .selector').hide();
     }
     
     function postprocess() {
@@ -281,6 +441,14 @@ jQuery(document).ready(function() {
         }
     }
     
+    function get_highlight_style() {
+        // get highlight.js style if provided
+        var highlight = params.get('highlight');
+        if (!highlight) highlight = 'default';
+        // add style reference to head to load it
+        $('head').append('<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/' + highlight.replace(/[^a-zA-Z0-9-_]+/ig, '') + '.min.css">');
+    }
+    
     function render_css(css) {
         // attempt to sanitize CSS so hacker don't splode our website
         var parser = new HtmlWhitelistedSanitizer(true);
@@ -289,32 +457,8 @@ jQuery(document).ready(function() {
         // update info panel
         render_info();
     }
-
-    function render(content) {
-        
-        var md = window.markdownit({
-            html: false, // Enable HTML tags in source
-            xhtmlOut: true, // Use '/' to close single tags (<br />).
-            breaks: true, // Convert '\n' in paragraphs into <br>
-            langPrefix: 'language-', // CSS language prefix for fenced blocks.
-            linkify: true,
-            typographer: true,
-            quotes: '“”‘’',
-            highlight: function(str, lang) {
-                if (lang && hljs.getLanguage(lang)) {
-                    try {
-                        return '<pre class="hljs"><code>' +
-                            hljs.highlight(lang, str, true).value +
-                            '</code></pre>';
-                    }
-                    catch (__) {}
-                }
-                return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
-            }
-        });
-        $('#wrapper').html( md.render(content) );
-    }
     
+    // helper function to ensure section ids are css compatible
     function css_name(str) {
         str = str.toLowerCase();
         // remove non-alphanumerics
@@ -337,95 +481,6 @@ jQuery(document).ready(function() {
         }).on('drop', function (el) {
             // update toc
             render_toc_html();
-        });
-    }
-    
-    function render_sections() {
-        
-        // header section
-        if ( $('#wrapper ' + header).length ) {
-            $('#wrapper ' + header).each(function() {
-                $(this).nextUntil(heading).andSelf().wrapAll('<section id="header"/>');
-                $(this).wrapInner('<a name="header"/>');
-            });
-        } else {
-            //no header, so we'll add an empty one
-            $('#wrapper').prepend('<section id="header"></section>');
-        }
-        
-        // command sections
-        $('#wrapper ' + heading).each(function() {
-            // get content of heading
-            // we need to ensure we have a css compatible name/id
-            var name = css_name( $(this).text() );
-            //name = name.replace(',', '');
-            $(this).append(toggle_html);
-            // add anchor link to make draggable
-            $(this).wrapInner('<a class="handle" name="' + name + '" href="#' + name + '"/>');
-            $(this).wrap('<div class="heading/>');
-            $(this).nextUntil(heading).andSelf().wrapAll('<div class="section" id="' + name + '"/>');
-            $(this).nextUntil(heading).wrapAll('<div class="content"/>');
-        });
-        
-        // wrap all command sections in new section
-        // can't use #header since there's a header in the info panel
-        $('#header').siblings().wrapAll('<section id="commands"/>');
-        
-        // add alternate classes to paragraphs
-        var counter = 0;
-        $('.content').children().each(function() {
-            if ( $( this ).is('p') ) {
-                if (counter === 0) {
-                    $(this).addClass('alternate');
-                    // check previous element and add 'alternative' class as needed
-                    var $prev = $(this).prev();
-                    if ( $prev.is('h1') || $prev.is('h2') || $prev.is('h3') || $prev.is('h4') || $prev.is('h5') || $prev.is('h6')) {
-                        $prev.addClass('alternate');
-                    }
-                    // check next element and add 'alternative' class as needed
-                    var $next = $(this).next();
-                    if ( $next.is('ul') || $next.is('blockquote') || $next.is('code')  || $next.is('pre') ) {
-                        $next.addClass('alternate');
-                    }
-                }
-                counter += 1;
-                if (counter === 2) counter = 0;
-            }
-        });
-        
-        // add relevant classes to section headings
-        $('.section ' + heading).addClass('heading');
-        
-        columnize(columns);
-        
-        // hide all other sections if showonly has been specified
-        if(showonly != '') {
-            $('#' + showonly).siblings().hide();
-        }
-    }
-    
-    function columnize(columns) {
-        // begin by wrapping all sections in first column
-        $('#commands .section').wrapAll('<div class="column column1of' + columns + '" id="column1"/>');
-        if( columns < 2 || columns > 4 ) {
-            return;
-        }
-        for (var i=2; i <= columns; i++) {
-            $('#commands').append('<div class="column column1of' + columns + '" id="column' + i + '"/>');
-        }
-        
-        var column_counter = 1;
-        
-        // iterate sections
-        $('#commands .section').each(function() {
-            if( column_counter > 1 ) {
-                // move this section to next column
-                $(this).detach().appendTo('#column' + column_counter);
-            }
-            column_counter += 1;
-            if( column_counter > columns ) {
-                column_counter = 1;
-            }
         });
     }
     
