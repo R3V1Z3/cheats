@@ -726,7 +726,9 @@ jQuery(document).ready(function() {
     function uri() {
         var q = params.toString();
         if ( q.length > 0 ) q = '?' + q;
-        return window.location.href.split('?')[0] + q + location.hash;
+        var base = window.location.href.split('?')[0];
+        base = base.split('#')[0];
+        return base + q + location.hash;
     }
     
     // helper function to ensure section ids are css compatible
