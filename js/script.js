@@ -35,6 +35,14 @@ var param = {
     postprocess: false
 };
 
+// key is name, value is gist id
+var example_gist = {
+    'Alexa Cheats': '2a06603706fd7c2eb5c93f34ed316354'
+};
+var example_css = {
+    'Alexa Cheats': '3340cb9dcb273289b51aef3570f5304d'
+};
+
 jQuery(document).ready(function() {
     
     main();
@@ -52,8 +60,7 @@ jQuery(document).ready(function() {
                 var gist = param['gist'];
                 if ( !gist || gist === 'default' ) {
                     param['gist'] === 'default';
-                    load_css(param['css']);
-                    su_render(data);
+                    load_css(data);
                 } else {
                     load_gist(param['gist']);
                 }
@@ -85,16 +92,9 @@ jQuery(document).ready(function() {
                 if ( val.indexOf('## Example Gists') != -1 ){
                     gist_found = true;
                     css_found = false;
-                    processed = '<input id="gist-input" type="text" placeholder="Gist ID" />';
-                    processed += '<a href="https://github.com' + path + 'blob/master/README.md" target="_blank">↪</a>';
-                    processed += '<span id="default">Default (README.md)</span><br/>';
                 }
                 if ( val.indexOf('## Example CSS Themes') != -1 ){
                     // css section found so let update the gist selector with processed info
-                    $('#gist-selector').html(processed);
-                    processed = '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
-                    processed += '<a href="https://github.com' + path + 'blob/master/css/style.css" target="_blank">↪</a>';
-                    processed += '<span id="default">Default (style.css)</span><br/>';
                     css_found = true;
                     gist_found = false;
                     examples_end = 1;
@@ -105,18 +105,18 @@ jQuery(document).ready(function() {
                         var x = val.split(' [')[1];
                         var name = x.split('](')[0];
                         x = x.split('gist=')[1];
+                        // get the gist id
                         var id = x.split( ') -' )[0];
-                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
-                        processed += '<span id="' + id + '">' + name + '</span><br/>';
+                        example_gist[name] = id;
                     } else if ( css_found ) {
                         examples_end++;
                         // item is from css example group
                         var x = val.split('- [')[1];
                         var name = x.split('](')[0];
                         x = x.split('css=')[1];
+                        // get the css gist id
                         var id = x.split( ') -' )[0];
-                        processed += '<a href="https://gist.github.com/' + id + '" target="_blank">↪</a>';
-                        processed += '<span id="' + id + '">' + name + '</span><br/>';
+                        example_css[name] = id;
                     }
                 } else {
                     // no more option found for current section, end of section
@@ -126,7 +126,7 @@ jQuery(document).ready(function() {
                     }
                 }
             }
-            $('#css-selector').html(processed);
+            //$('#css-selector').html(processed);
         });
         return processed;
     }
@@ -167,43 +167,47 @@ jQuery(document).ready(function() {
             } else {
                 objects.push(gistdata.data.files[gist_filename].content);
             }
-            su_render(objects[0]);
-            load_css(param['css']);
+            // to ensure external css is loaded too, we'll pass gist data through to css function
+            if ( param['css'] != 'default' || param['css'] != '' ) {
+                load_css(objects[0]);
+            } else {
+                // if css is default, we'll go right to rendering
+                su_render(objects[0]);
+            }
         }).error(function(e) {
             console.log('Error on ajax return.');
         });
     }
     
-    function load_css(css) {
+    function load_css(data) {
         // allow for custom CSS via Gist
-        if ( css != 'default' && css != '' ) {
-            $.ajax({
-                url: 'https://api.github.com/gists/' + css,
-                type: 'GET',
-                dataType: 'jsonp'
-            }).success(function(gistdata) {
-                var objects = [];
-                var cssfilename = param['cssfilename'];
-                if ( cssfilename === '' ) {
-                    for (var file in gistdata.data.files) {
-                        if (gistdata.data.files.hasOwnProperty(file)) {
-                            // get filename
-                            param['cssfilename'] = gistdata.data.files[file].filename;
-                            // get file contents
-                            var o = gistdata.data.files[file].content;
-                            if (o) {
-                                objects.push(o);
-                            }
+        $.ajax({
+            url: 'https://api.github.com/gists/' + param['css'],
+            type: 'GET',
+            dataType: 'jsonp'
+        }).success(function(gistdata) {
+            var objects = [];
+            var cssfilename = param['cssfilename'];
+            if ( cssfilename === '' ) {
+                for (var file in gistdata.data.files) {
+                    if (gistdata.data.files.hasOwnProperty(file)) {
+                        // get filename
+                        param['cssfilename'] = gistdata.data.files[file].filename;
+                        // get file contents
+                        var o = gistdata.data.files[file].content;
+                        if (o) {
+                            objects.push(o);
                         }
                     }
-                } else {
-                    objects.push(gistdata.data.files[cssfilename].content);
                 }
-                render_css(objects[0]);
-            }).error(function(e) {
-                console.log('Error on ajax return.');
-            });
-        }
+            } else {
+                objects.push(gistdata.data.files[cssfilename].content);
+            }
+            render_css(objects[0]);
+            su_render(data);
+        }).error(function(e) {
+            console.log('Error on ajax return.');
+        });
     }
     
     // Start content rendering process
@@ -217,11 +221,11 @@ jQuery(document).ready(function() {
         get_highlight_style();
         tag_replace('kbd');
         tag_replace('i');
+        tag_replace('<!--');
         if( params.has('postprocess') ) {
             postprocess();
         }
         render_info();
-        update_index();
         render_extra();
         render_variations(param['variations']); // used in voice assistant cheatsheets
         draggable();
@@ -348,12 +352,6 @@ jQuery(document).ready(function() {
         });
     }
     
-    // update index.html details so project can be safely forked without any changes
-    function update_index(){
-        var url = 'https://github.com' + path + '#cheats';
-        $('#github-fork').attr('href', url);
-    }
-    
     function postprocess() {
         // convert `` to kbd where needed
         $('code').each(function(i, val) {
@@ -394,38 +392,6 @@ jQuery(document).ready(function() {
         return processed;
     }
     
-    // find first character in str that is not char and return its location
-    function find_first_char_not(char, str) {
-        for (var i = 0; i < str.length; i++){
-            if (str[i] != char){
-                return i;
-            }
-        }
-        // found only same char so return -1
-        return -1;
-    }
-    
-    // custom method to allow for certain tags like <i> and <kbd>
-    // extra security measures need to be taken here since we're allowing html
-    function tag_replace(tag) {
-        var open = new RegExp('&lt;' + tag + '(.*?)&gt;', 'gi');
-        var close = new RegExp('&lt;\/' + tag + '&gt;', 'gi');
-        var str = $('#wrapper').html();
-        str = str.replace(open, '<' + tag + '$1>').replace(close, '</' + tag + '>');
-        $('#wrapper').html(str);
-        // update fontawesome icons
-        if ( tag === 'i' ){
-            $('i').attr('class', function(_, classes) {
-                if( classes.indexOf('fa-') < 0 ){
-                    classes = css_name(classes);
-                    classes = classes.replace(/icon-(.*?)/, "fa-$1");
-                }
-                return classes;
-            });
-            $('i').addClass('fa');
-        }
-    }
-    
     function jump_to_hash() {
         // now with document rendered, jump to user provided url hash link
         var hash = location.hash;
@@ -445,13 +411,47 @@ jQuery(document).ready(function() {
         $('head').append('<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/' + highlight.replace(/[^a-zA-Z0-9-_]+/ig, '') + '.min.css">');
     }
     
+    // custom method to allow for certain tags like <i> and <kbd>
+    // extra security measures need to be taken here since we're allowing html
+    function tag_replace(tag) {
+        var str = $('#wrapper').html();
+        if( tag === '<!--' ) {
+            var r = new RegExp('&lt;!--' + '(.*?)' + '--&gt;', 'gi');
+            str = str.replace( r , '<!--$1-->' );
+            $('#wrapper').html(str);
+            // replace back comments wrapped in code blocks
+            $('code').contents().each(function(i, val) {
+                if ( this.nodeType === 8 ) {
+                    var p = this.parentNode;
+                    var r = document.createTextNode('<!-- ' + this.nodeValue + ' -->');
+                    p.replaceChild( r, this );
+                }
+            });
+            
+        } else {
+            var open = new RegExp('&lt;' + tag + '(.*?)&gt;', 'gi');
+            var close = new RegExp('&lt;\/' + tag + '&gt;', 'gi');
+            str = str.replace(open, '<' + tag + '$1>').replace(close, '</' + tag + '>');
+            $('#wrapper').html(str);
+            // update fontawesome icons
+            if ( tag === 'i' ){
+                $('i').attr('class', function(_, classes) {
+                    if( classes.indexOf('fa-') < 0 ){
+                        classes = css_name(classes);
+                        classes = classes.replace(/icon-(.*?)/, "fa-$1");
+                    }
+                    return classes;
+                });
+                $('i').addClass('fa');
+            }
+        }
+    }
+    
     function render_css(css) {
         // attempt to sanitize CSS so hacker don't splode our website
         var parser = new HtmlWhitelistedSanitizer(true);
         var sanitizedHtml = parser.sanitizeString(css);
         $('head').append('<style>' + sanitizedHtml + '</style>');
-        // update info panel
-        render_info();
     }
     
     function draggable() {
@@ -467,6 +467,47 @@ jQuery(document).ready(function() {
     }
     
     function render_info() {
+        
+        var content = '';
+        content += '<a id="github-fork" href="https://github.com' + path + '#cheats">'
+        content += '<img style="position: absolute; top: 0; right: 0; border: 0;" src="//ugotsta.github.io/images/fork-white.png" alt="Fork me on GitHub"></a>';
+        content += '<h1 class="cheats">CHEATS</h1>';
+        content += '<div id="command-count">.section total:</div>';
+        content += '</br>';
+        content += '<div id="gist-details">';
+        content += 'View this file:</br>';
+        content += '<a id="gist-source" href="https://github.com' + path;
+        content += 'master/README.md" target="_blank">↪</a>';
+        content += '<span id="gist-url" class="selector-toggle">▼ README.md</span>';
+        content += '<div id="gist-selector" class="selector">';
+        content += '<input id="gist-input" type="text" placeholder="Gist ID" />';
+        
+        content += '<a href="https://github.com/Ugotsta/cheats/blob/master/README.md" target="_blank">↪</a>';
+        content += '<span id="default">Default (README.md)</span><br/>';
+        
+        // Example Gist list
+        content += example_content(example_gist);
+        
+        content += '</div></div><br/>';
+        content += '<div id="css-details">';
+        content += 'CSS Theme:<br/>';
+        content += '<a id="css-source" href="https://github.com' + path;
+        content += 'blob/master/css/style.css" target="_blank">↪</a>';
+        content += '<span id="css-url" class="selector-toggle">▼ Default (style.css)</span>';
+        content += '<div id="css-selector" class="selector">';
+        content += '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
+        
+        content += '<a href="https://github.com/Ugotsta/cheats/blob/master/css/style.css" target="_blank">↪</a>';
+        content += '<span id="default">Default (style.css)</span><br/>';
+        
+        // Example CSS list
+        content += example_content(example_css);
+        
+        content += '</div></div><br/>';
+        content += '<h3>Table of Contents</h3>';
+        content += '<div id="toc"></div>';
+        content += '<div id="hide"><kbd>?</kbd> - show/hide this panel.</div>';
+        $('#info').html(content);
         
         // render TOC
         render_toc_html();
@@ -489,6 +530,7 @@ jQuery(document).ready(function() {
         if (param['css'] != 'default') {
             url = 'https://gist.github.com/' + param['css'];
             $('#css-url').text('▼ ' + param['cssfilename']);
+            console.log('cssfilename: ' + param['cssfilename']);
         } else {
             url = 'https://github.com' + path + 'blob/master/css/style.css';
         }
@@ -702,6 +744,27 @@ jQuery(document).ready(function() {
         // convert whitespaces and underscore to dash
         str = str.replace(/[\s_]/g, '-');
         return str;
+    }
+    
+    // find first character in str that is not char and return its location
+    function find_first_char_not(char, str) {
+        for (var i = 0; i < str.length; i++){
+            if (str[i] != char){
+                return i;
+            }
+        }
+        // found only same char so return -1
+        return -1;
+    }
+    
+    // helper function to avoid replication of example content
+    function example_content(examples) {
+        var content = '';
+        for (var key in examples) {
+            content += '<a href="https://gist.github.com/' + examples[key] + '" target="_blank">↪</a>';
+            content += '<span id="' + examples[key] + '">' + key + '</span><br/>';
+        }
+        return content;
     }
 
 });

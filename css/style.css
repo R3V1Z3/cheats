@@ -34,10 +34,6 @@ body, html, #wrapper {
   margin: 0px 10px 0px 10px;
 }
 
-a[name=header] {
-    font-size: 1.5em;
-}
-
 .cheats {
   font-size: 1.5em;
 }
