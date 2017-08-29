@@ -4,7 +4,8 @@ var toggle_html='<span class="toggle">-</span>';
 
 // get URL parameters
 let params = (new URL(location)).searchParams;
-var path = window.location.pathname.split('index.html')[0];
+var path = '/' + window.location.hostname.split('.')[0];
+path += window.location.pathname;
 
 // set default options
 var options = {
@@ -36,12 +37,8 @@ var param = {
 };
 
 // key is name, value is gist id
-var example_gist = {
-    'Alexa Cheats': '2a06603706fd7c2eb5c93f34ed316354'
-};
-var example_css = {
-    'Alexa Cheats': '3340cb9dcb273289b51aef3570f5304d'
-};
+var example_gist = {};
+var example_css = {};
 
 jQuery(document).ready(function() {
     
@@ -469,8 +466,8 @@ jQuery(document).ready(function() {
     function render_info() {
         
         var content = '';
-        content += '<a id="github-fork" href="https://github.com' + path + '#cheats">'
-        content += '<img style="position: absolute; top: 0; right: 0; border: 0;" src="//ugotsta.github.io/images/fork-white.png" alt="Fork me on GitHub"></a>';
+        content += '<a class="github-fork-ribbon" href="https://github.com' + path + '#cheats" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>'
+
         content += '<h1 class="cheats">CHEATS</h1>';
         content += '<div id="command-count">.section total:</div>';
         content += '</br>';
@@ -478,7 +475,7 @@ jQuery(document).ready(function() {
         content += 'View this file:</br>';
         content += '<a id="gist-source" href="https://github.com' + path;
         content += 'master/README.md" target="_blank">↪</a>';
-        content += '<span id="gist-url" class="selector-toggle">▼ README.md</span>';
+        content += '<span id="gist-url" class="selector-toggle">README.md ▾</span>';
         content += '<div id="gist-selector" class="selector">';
         content += '<input id="gist-input" type="text" placeholder="Gist ID" />';
         
@@ -493,7 +490,7 @@ jQuery(document).ready(function() {
         content += 'CSS Theme:<br/>';
         content += '<a id="css-source" href="https://github.com' + path;
         content += 'blob/master/css/style.css" target="_blank">↪</a>';
-        content += '<span id="css-url" class="selector-toggle">▼ Default (style.css)</span>';
+        content += '<span id="css-url" class="selector-toggle">Default (style.css) ▾</span>';
         content += '<div id="css-selector" class="selector">';
         content += '<input id="css-input" type="text" placeholder="Gist ID for CSS theme" />';
         
@@ -521,7 +518,7 @@ jQuery(document).ready(function() {
         var url = '';
         if (param['gist'] != 'default') {
             url = 'https://gist.github.com/' + param['gist'];
-            $('#gist-url').text('▼ ' + param['gist_filename']);
+            $('#gist-url').text(param['gist_filename'] + ' ▾');
         } else {
             url = 'https://github.com' + path + 'blob/master/README.md';
         }
@@ -529,7 +526,7 @@ jQuery(document).ready(function() {
         
         if (param['css'] != 'default') {
             url = 'https://gist.github.com/' + param['css'];
-            $('#css-url').text('▼ ' + param['cssfilename']);
+            $('#css-url').text(param['cssfilename'] + ' ▾');
             console.log('cssfilename: ' + param['cssfilename']);
         } else {
             url = 'https://github.com' + path + 'blob/master/css/style.css';

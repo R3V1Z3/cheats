@@ -368,6 +368,15 @@ form {
   display: inline;
 }
 
+#info a.github-fork-ribbon:before {
+  background-color: #FF851B;
+}
+
+#info a.github-fork-ribbon:after {
+  color: #fff;
+  font-family: 'Inconsolata', monospace;
+}
+
 /* Scrollbar styling */
 
 ::-webkit-scrollbar {
