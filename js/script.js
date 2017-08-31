@@ -537,14 +537,15 @@ jQuery(document).ready(function() {
     function render_toc_html() {
         var html = '';
         // iterate section classes and get id name to compose TOC
-        $( '#commands .section' ).each(function() {
-            var name = $(this).attr('id');
+        $( '#commands a.handle' ).each(function() {
+            var name = $(this).attr('name');
             var toggle_hidden = '';
             if ( $('#' + name).is(':hidden') ){
                 toggle_hidden ='class="hidden"';
             }
             html += '<a href="#' + name + '" ' + toggle_hidden + '>';
-            html += name;
+            var t = $(this).text();
+            html += t.substr( 0, t.length - 1 );
             html += toggle_html;
             html += '</a>';
         });
