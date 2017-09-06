@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
     function main() {
         var variations = $gitdown.update_parameter('variations');
         render_variations(variations);
-        var c = $gitdown.update_parameter('columns');
+        var c = $gitdown.update_parameter( 'columns', 2);
         columnize( c );
         alternate();
         draggable();
