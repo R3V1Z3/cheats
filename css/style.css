@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=PT+Sans');
-@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+@import url('https://fonts.googleapis.com/css?family=Share+Tech+Mono');
 
 /* General */
 
@@ -11,38 +10,39 @@
   font-size: 100%;
   vertical-align: middle;
   background: transparent;
-  font-family: 'Inconsolata', monospace;
+  font-family: 'Share Tech Mono', monospace;
   text-shadow: none;
 }
 
-html {
-  width: 100%;
-}
-
-body, html, #wrapper {
+body, html, #wrapper, .container {
   height:100%;
+  width: 100%;
+  
 }
 
-#wrapper {
+.container {
   margin: auto;
+}
+
+.inner {
   padding: 20px;
+  width: 97%;
 }
 
 /* Header */
 
-#header {
+.header {
   margin: 0px 10px 0px 10px;
 }
 
 .cheats {
   font-size: 1.5em;
+  letter-spacing: -0.1em;
 }
 
 .cheats:after {
-  content: 'heet';
-  padding-left: 2px;
+  content: 'cheat';
   color: #ff851b;
-  font-weight: bold;
 }
 
 /* Command sections */
@@ -73,6 +73,7 @@ a:hover {
 
 .section .content {
   background: rgba(255,255,255,0.75);
+  padding: 4px;
 }
 
 .section .alternate {
@@ -105,6 +106,10 @@ ul li {
   margin: 0px 6px;
 }
 
+li:before {
+  content: "";
+}
+
 li:nth-child(odd) {
   background-color: rgba(255,255,255,0.15);
 }
@@ -134,7 +139,7 @@ pre.hljs {
   background: rgba(255,255,255,0.45);
 }
 
-kbd, #info kbd {
+kbd, .info kbd {
   display: inline-block;
   padding: 3px 5px;
   font-size: 11px;
@@ -170,10 +175,22 @@ kbd:hover {
   background-color: rgba(255,255,255,0.5);
 }
 
+.toggle:after {
+  content: "-";
+}
+
+.toc .hidden {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
 /* Info panel */
 
-#info * {
-  font-family: 'Inconsolata', monospace;
+#cheats .container .info a.help-ribbon {
+  font-family: 'Share Tech Mono';
+}
+
+.info * {
   text-shadow: none;
   color: #fff;
   font-weight: normal;
@@ -181,7 +198,7 @@ kbd:hover {
   text-transform: none;
 }
 
-#info {
+.info {
   background: rgba(0,0,0,0.9);
   position: fixed;
   float:right;
@@ -194,39 +211,42 @@ kbd:hover {
   padding: 10px;
 }
 
-#info a {
+.info a {
   color: #ff851b;
   text-decoration: none;
 }
 
-#info a:hover {
+.info a:hover {
   color: #ffffff;
 }
 
-#info h1 {
+.info h1 {
   margin: 0;
 }
 
-#info #gist-url,
-#info #css-url {
-  font-size: 0.9em;
+.info h3 {
+  margin: 20px 0;
+}
+
+.info .gist-url,
+.info .css-url {
   background: rgba(255,255,255,0.15);
   padding-left: 4px;
   padding-right: 4px;
   border-radius: 3px;
 }
 
-#info .fa {
+.info .fa {
   font-family: 'FontAwesome';
   color: #ff851b;
   vertical-align: middle;
 }
 
-#info .fa:hover {
+.info .fa:hover {
   color: #fff;
 }
 
-#info #toc {
+.info .toc {
   max-height: 200px;
   overflow-y: scroll;
   background-color: rgb(255, 255, 255);
@@ -234,31 +254,25 @@ kbd:hover {
   border-radius: 5px;
 }
 
-#info #toc a,
-#gist-url,
-#css-url {
+.info .toc a,
+.gist-url,
+.css-url {
   display: inline;
-  font-size: 0.85em;
   color: #ff851b;
   cursor: pointer;
 }
 
-#info #toc a {
+.info .toc a {
   display: block;
 }
 
-#info #toc a:hover,
-#gist-url:hover,
-#css-url:hover {
+.info .toc a:hover,
+.gist-url:hover,
+.css-url:hover {
   color: #ffffff;
 }
 
-#toc .hidden {
-  text-decoration: line-through;
-  opacity: 0.5;
-}
-
-#info #hide {
+.info .hide {
   position: absolute;
   text-align: right;
   bottom: 20px;
@@ -266,13 +280,13 @@ kbd:hover {
   color: #ff851b;
 }
 
-#info kbd {
+.info kbd {
   font-weight: bold;
   color: #000;
   font-size: 1em;
 }
 
-#info #hide:hover {
+.info .hide:hover {
   color: #ffffff;
   cursor: pointer;
 }
@@ -282,7 +296,7 @@ form {
   align-items: center;
 }
 
-#command-count code {
+.command-count code {
   background: rgba(255,255,255,0.25);
   padding: 2px 4px;
   border-radius: 3px;
@@ -290,7 +304,7 @@ form {
 }
 
 /* Gist and CSS selector */
-#info .selector {
+.info .selector {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -306,19 +320,19 @@ form {
   border-left: 1px solid #777;
 }
 
-#info .selector span {
+.info .selector span {
   color: #ff851b;
 }
 
-#info .selector span:hover {
+.info .selector span:hover {
   color: #fff;
 }
 
-#info .selector span {
+.info .selector span {
   margin-left: 6px;
 }
 
-#info .selector input {
+.info .selector input {
   margin-bottom: 6px;
   width: 95%;
   border-radius: 5px;
@@ -330,8 +344,8 @@ form {
   outline: 1px solid rgba(0,0,0,0.2);
 }
 
-#info .selector input::-webkit-input-placeholder,
-#info .selector input::-moz-placeholder {
+.info .selector input::-webkit-input-placeholder,
+.info .selector input::-moz-placeholder {
   color: rgba(0,0,0,0.15);
 }
 
@@ -362,19 +376,16 @@ form {
 
 .content li strong .variation {
   display: none;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.content li strong .variation:hover {
+  background: rgba(255,255,255,0.25);
 }
 
 .content li strong .variation.current {
   display: inline;
-}
-
-#info a.github-fork-ribbon:before {
-  background-color: #FF851B;
-}
-
-#info a.github-fork-ribbon:after {
-  color: #fff;
-  font-family: 'Inconsolata', monospace;
 }
 
 /* Scrollbar styling */
@@ -398,7 +409,7 @@ form {
   #wrapper {
     padding: 0px;
   }
-  #info {
+  .info {
     display: none;
   }
   .section .toggle {

@@ -1,5 +1,5 @@
 # CHEATS
-Easily view and interact with cheatsheets hosted for free through [GitHub Gist](https://gist.github.com/) service, where you can easily create plain text files using Markdown syntax for formatting. Once you have a document created, view it through CHEATSheet using a special URL parameter as described below.
+Easily view and interact with cheatsheets hosted for free through [GitHub Gist](https://gist.github.com/) service, where you can easily create plain text files using Markdown syntax for formatting. Once you have a document created, view it through CHEATScheat using a special URL parameter as described below.
 
 ## The Basics
 An info panel will show in the top right corner (not available on mobile devices) that provides easy access to stats, a table of contents and some other helpful links.
@@ -51,7 +51,7 @@ URL parameters can take effort to learn and use. Here are some examples to help 
 - [Fiery Darkness](?css=c860958c04a53cd77575d5487ab1dec9) - Fiery red and yellow set against darkness.
 
 ## Built for GitHub Pages
-CHEATSheet is designed for use with [GitHub Pages](https://pages.github.com/) and made to be easily forked. This file contains hidden options for use when forked. 
+CHEATScheat is designed for use with [GitHub Pages](https://pages.github.com/) and made to be easily forked. This file contains hidden options for use when forked. 
 
 Options are hidden using HTML comment tags like so:
 ```<!-- [options: hide_info=false, parameters_disallowed=css|header|heading] -->```
@@ -65,5 +65,3 @@ Options available:
 - `hide_toc` - hides the table of contents.
 - `disable_hide` - disable hiding of the info panel.
 - `parameters_disallowed` - a list of URL parameters to disallow, separated by |
-
-<!-- [options: hide_info=false] -->
