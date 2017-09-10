@@ -25,8 +25,7 @@ body, html, #wrapper, .container {
 }
 
 .inner {
-  padding: 20px;
-  width: 97%;
+  width: 100%;
 }
 
 /* Header */

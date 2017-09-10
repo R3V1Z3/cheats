@@ -141,7 +141,6 @@ jQuery(document).ready(function() {
         }
         
         // add toggle buttons to toc
-        // logic here is entailing toggle buttons are not re-added when clicked
         $( '.info .toc a' ).each(function() {
             var t = $(this).html();
             $(this).html( t + toggle_html );
