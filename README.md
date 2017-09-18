@@ -31,25 +31,6 @@ URL parameters can take effort to learn and use. Here are some examples to help 
 - Change number of columns to 1: [?columns=1](?columns=1)
 - Change number of columns to 2 and default font size to 100%: [?columns=2&fontsize=100](?columns=2&fontsize=100)
 
-## Example Gists
-- [Alexa Cheats](?gist=2a06603706fd7c2eb5c93f34ed316354) - Fun commands for Amazon Alexa.
-- [Screen Cheatsheet](?gist=af918e1618682638aa82) - Helpful commands for Screen.
-- [Regular Expression Cheatsheet](?gist=3893f6ac9447f7ee27fe) - Easy reference for regular expressions.
-- [Markdown resources](?gist=eba62d45c82d0767a5a0) - A great showcase for Markdownit's rendering capabilities.
-- [An exhibit of Markdown](?gist=deb74713e6aff8fdfce2) - Another great showcase for Markdown rendering.
-- [Vim Cheats](?gist=c002acb756d5cf09b1ad98494a81baa3) - Simple, intuitive cheatsheet for Vim
-
-## Example CSS Themes
-- [Alexa Cheats](?css=3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
-- [Vintage](?css=686ce03846004fd858579392ca0db2c1) - Vintage print styling.
-- [Outlaw](?css=76c39d26b1b44e07bd7a783311caded8) - Straight criminal out the old west.
-- [Old Glory](?css=43bff1c9c6ae8a829f67bd707ee8f142) - Real old, real beautiful.
-- [Corkboard](?css=ada930f9dae1d0a8d95f41cb7a56d658) - Lively corkboard theme with CSS pins.
-- [Alternating Colors](?css=e774fa60940e2dc452d78e8382798a2c) - Flat but colorful theme.
-- [Spacious](?css=160db22223834d33b08337cebbbba94e) - Spacious with subtle colors.
-- [Eerie](?css=7ac556b27c2cd34b00aa59e0d3621dea) - Eerie theme from [Eerie CSS](https://ugotsta.github.io/eerie-css/) project.
-- [Fiery Darkness](?css=c860958c04a53cd77575d5487ab1dec9) - Fiery red and yellow set against darkness.
-
 ## Built for GitHub Pages
 CHEATScheat is designed for use with [GitHub Pages](https://pages.github.com/) and made to be easily forked. This file contains hidden options for use when forked. 
 
@@ -65,3 +46,21 @@ Options available:
 - `hide_toc` - hides the table of contents.
 - `disable_hide` - disable hiding of the info panel.
 - `parameters_disallowed` - a list of URL parameters to disallow, separated by |
+
+# Examples <!-- {$gd_info} -->
+<!-- {$gd_help_ribbon} -->
+<!-- {$gd_element_count} -->
+
+Example Gists <!-- {$gd_gist} -->
+- [Alexa Cheats](https://gist.github.com/2a06603706fd7c2eb5c93f34ed316354)
+- [Screen Cheatsheet](https://gist.github.com/af918e1618682638aa82)
+- [Regular Expression Cheatsheet](https://gist.github.com/3893f6ac9447f7ee27fe)
+- [Markdown resources](https://gist.github.com/eba62d45c82d0767a5a0)
+- [An exhibit of Markdown](https://gist.github.com/deb74713e6aff8fdfce2)
+- [Vim Cheats](https://gist.github.com/c002acb756d5cf09b1ad98494a81baa3)
+
+Themes <!-- {$gd_css} -->
+- [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
+
+<!-- {$gd_toc="Table of Contents"} -->
+<!-- {$gd_hide} -->
