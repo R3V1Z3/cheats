@@ -51,6 +51,8 @@ Options available:
 <!-- {$gd_help_ribbon} -->
 <!-- {$gd_element_count} -->
 
+<!-- {$gd_choice_columns="1,2,3,4"} -->
+
 Example Gists <!-- {$gd_gist} -->
 - [Alexa Cheats](https://gist.github.com/2a06603706fd7c2eb5c93f34ed316354)
 - [Screen Cheatsheet](https://gist.github.com/af918e1618682638aa82)
