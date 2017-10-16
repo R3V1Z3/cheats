@@ -8,23 +8,17 @@ jQuery(document).ready(function() {
                                 'content': 'README.md',
                                 'callback': main
     } );
-    var $gitdown = $('#wrapper').data('gitdown');
+    var $gd = $('#wrapper').data('gitdown');
 
     function main() {
-        var variations = $gitdown.update_parameter('variations');
+        var variations = $gd.update_parameter('variations');
         render_variations(variations);
-        var c = $gitdown.update_parameter( 'columns', 2);
+        var c = $('.info .field.choices.columns .choice.selected').attr('data-value');
         columnize( c );
         alternate();
         draggable();
         update_toc();
         register_events();
-
-        // hide all other sections if showonly has been specified
-        // if( param['showonly'] != '') {
-        //     $('#' + param['showonly']).siblings().hide();
-        // }
-        
     }
     
     function columnize(columns) {
@@ -160,6 +154,16 @@ jQuery(document).ready(function() {
             $( '#' + name ).hide();
             // add hidden class to toc item;
             $( '.toc a[href*="#' + name + '"]' ).addClass('hidden');
+        });
+
+        // column field click
+        $('.info .field.choices.columns .choice').click(function(){
+            var c = $(this).attr('data-value');
+            // move .sections to .inner
+            $('.section').appendTo('.inner');
+            $('.column').remove();
+            columnize( c );
+            draggable();
         });
         
         // add click event to toggle items in toc
