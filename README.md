@@ -53,6 +53,8 @@ Options available:
 
 <!-- {$gd_choice_columns="1,*2,3,4"} -->
 
+-----
+
 Example Gists <!-- {$gd_gist} -->
 - [Alexa Cheats](https://gist.github.com/2a06603706fd7c2eb5c93f34ed316354)
 - [Screen Cheatsheet](https://gist.github.com/af918e1618682638aa82)
@@ -61,8 +63,14 @@ Example Gists <!-- {$gd_gist} -->
 - [An exhibit of Markdown](https://gist.github.com/deb74713e6aff8fdfce2)
 - [Vim Cheats](https://gist.github.com/c002acb756d5cf09b1ad98494a81baa3)
 
+-----
+
 Themes <!-- {$gd_css} -->
 - [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
 
-<!-- {$gd_toc="Table of Contents"} -->
+-----
+
+### Table of Contents
+
+<!-- {$gd_toc} -->
 <!-- {$gd_hide} -->
