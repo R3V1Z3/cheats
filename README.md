@@ -51,8 +51,6 @@ Options available:
 <!-- {$gd_help_ribbon} -->
 <!-- {$gd_element_count} -->
 
-<!-- {$gd_choice_columns="1,*2,3,4"} -->
-
 -----
 
 Example Gists <!-- {$gd_gist} -->
@@ -65,12 +63,25 @@ Example Gists <!-- {$gd_gist} -->
 
 -----
 
-Themes <!-- {$gd_css} -->
-- [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
+<!-- {$gd_collapsible_appearance} -->
 
 -----
 
-### Table of Contents
+Themes <!-- {$gd_css} -->
+- [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
+
+<!-- {$gd_slider_fontsize="110,50,300,1,%"} -->
+
+<!-- {$gd_choice_columns="1,*2,3,4"} -->
+
+<!-- {$gd_theme_variables} -->
+
+<!-- {$gd_collapsible_end_appearance} -->
+
+<!-- {$gd_collapsible_contents} -->
 
 <!-- {$gd_toc} -->
+
+<!-- {$gd_collapsible_end_contents} -->
+
 <!-- {$gd_hide} -->
