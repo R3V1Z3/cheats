@@ -33,12 +33,19 @@ body, html, #wrapper, .container {
   margin: 0px 10px 0px 10px;
 }
 
-.cheats {
+.gd-default .info h1 {
   font-size: 1.5em;
   letter-spacing: -0.1em;
 }
 
-.cheats:after {
+.cheats,
+.gd-default .info h1 {
+  font-size: 1.5em;
+  letter-spacing: -0.1em;
+}
+
+.cheats:after,
+.gd-default .info h1:after {
   content: 'cheat';
   color: #ff851b;
 }

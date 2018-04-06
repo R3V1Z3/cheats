@@ -48,7 +48,11 @@ Options available:
 - `parameters_disallowed` - a list of URL parameters to disallow, separated by |
 
 # Examples <!-- {$gd_info} -->
+
 <!-- {$gd_help_ribbon} -->
+
+Markdown cheatsheet viewer
+
 <!-- {$gd_element_count} -->
 
 -----
