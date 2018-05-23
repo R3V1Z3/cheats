@@ -5,7 +5,7 @@ Easily view and interact with cheatsheets hosted for free through [GitHub Gist](
 An info panel will show in the top right corner (not available on mobile devices) that provides easy access to stats, a table of contents and some other helpful links.
 
 ## Keyboard Commands
-<kbd>?</kbd> or <kbd>/</kbd> - Hide/show the Info panel.  
+<kbd>F1</kbd> - Hide/show the Info panel.  
 <kbd>Esc</kbd> - Hide any open options such as the Gist and CSS selectors.  
 
 ## Printing
@@ -73,8 +73,6 @@ Example Gists <!-- {$gd_gist} -->
 
 Themes <!-- {$gd_css} -->
 - [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
-
-<!-- {$gd_slider_fontsize="110,50,300,1,%"} -->
 
 <!-- {$gd_choice_columns="1,*2,3,4"} -->
 

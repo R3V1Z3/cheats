@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Share+Tech+Mono');
 
+:root {
+  --fontsize: 100%;
+}
+
 /* General */
 
 * {
@@ -16,7 +20,6 @@
 body, html, #wrapper, .container {
   height:100%;
   width: 100%;
-  
 }
 
 .container {
@@ -25,6 +28,7 @@ body, html, #wrapper, .container {
 
 .inner {
   width: 100%;
+  font-size: var(--fontsize);
 }
 
 /* Header */
