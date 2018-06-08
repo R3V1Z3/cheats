@@ -1,6 +1,7 @@
 const gd = new GitDown('#wrapper', {
     title: 'CHEATS',
     content: 'README.md',
+    variations: 'true',
     callback: main
 });
 
