@@ -8,10 +8,11 @@ const gd = new GitDown('#wrapper', {
 var toggle_html='<span class="toggle"></span>';
 
 function main() {
+    gd.status.log();
     var variations = gd.update_parameter('variations');
     render_variations(variations);
     var c = $('.info .field.choices.columns .choice.selected').attr('data-value');
-    columnize( c );
+    if ( !gd.status.has('theme-changed') ) columnize( c );
     alternate();
     draggable();
     update_toc();
@@ -24,6 +25,8 @@ function columnize(columns) {
     if( columns < 2 || columns > 4 ) {
         return;
     }
+
+    // PROBLEM: first column is gettting column div added twice
     for (var i=2; i <= columns; i++) {
         $('.inner').append('<div class="column column1of' + columns + '" id="column' + i + '"/>');
     }

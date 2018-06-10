@@ -59,6 +59,7 @@ Markdown cheatsheet viewer
 
 Example Gists <!-- {$gd_gist} -->
 - [Alexa Cheats](https://gist.github.com/2a06603706fd7c2eb5c93f34ed316354)
+- [Tmux Cheatsheet](https://gist.github.com/2961058)
 - [Screen Cheatsheet](https://gist.github.com/af918e1618682638aa82)
 - [Regular Expression Cheatsheet](https://gist.github.com/3893f6ac9447f7ee27fe)
 - [Markdown resources](https://gist.github.com/eba62d45c82d0767a5a0)
