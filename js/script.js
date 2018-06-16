@@ -11,7 +11,7 @@ function main() {
     gd.status.log();
     var variations = gd.update_parameter('variations');
     render_variations(variations);
-    var c = $('.info .field.choices.columns .choice.selected').attr('data-value');
+    var c = $('.info .field.slider.columns').attr('data-value');
     if ( !gd.status.has('theme-changed') ) columnize( c );
     alternate();
     draggable();
@@ -156,9 +156,8 @@ function register_events() {
         $( '.toc a[href*="#' + name + '"]' ).addClass('hidden');
     });
 
-    // column field click
-    $('.info .field.choices.columns .choice').click(function(){
-        var c = $(this).attr('data-value');
+    $('.info .slider.columns input').on('input change', function(e) {
+        var c = $(this).val();
         // move .sections to .inner
         $('.section').appendTo('.inner');
         $('.column').remove();

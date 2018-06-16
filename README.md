@@ -75,7 +75,7 @@ Example Gists <!-- {$gd_gist} -->
 Themes <!-- {$gd_css} -->
 - [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
 
-<!-- {$gd_choice_columns="1,*2,3,4"} -->
+<!-- {$gd_slider_columns="2,1,4,1"} -->
 
 <!-- {$gd_theme_variables} -->
 
