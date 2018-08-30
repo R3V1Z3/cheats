@@ -35,7 +35,9 @@ URL parameters can take effort to learn and use. Here are some examples to help 
 CHEATScheat is designed for use with [GitHub Pages](https://pages.github.com/) and made to be easily forked. This file contains hidden options for use when forked. 
 
 Options are hidden using HTML comment tags like so:
-```<!-- [options: hide_info=false, parameters_disallowed=css|header|heading] -->```
+```
+<!-- [options: hide_info=false, parameters_disallowed=css|header|heading] -->
+```
 
 Options available:
 - `hide_info` - makes the info panel totally inaccessible.
@@ -47,17 +49,15 @@ Options available:
 - `disable_hide` - disable hiding of the info panel.
 - `parameters_disallowed` - a list of URL parameters to disallow, separated by |
 
-# Examples <!-- {$gd_info} -->
+# CHEATS `🅖-nav`
 
-<!-- {$gd_help_ribbon} -->
+`ⓘ The code below designates a list of content sources the user will be able to select from in the app.`
 
 Markdown cheatsheet viewer
 
-<!-- {$gd_element_count} -->
-
 -----
 
-Example Gists <!-- {$gd_gist} -->
+content `🅖-datalist`
 - [Alexa Cheats](https://gist.github.com/2a06603706fd7c2eb5c93f34ed316354)
 - [Tmux Cheatsheet](https://gist.github.com/2961058)
 - [Screen Cheatsheet](https://gist.github.com/af918e1618682638aa82)
@@ -66,25 +66,20 @@ Example Gists <!-- {$gd_gist} -->
 - [An exhibit of Markdown](https://gist.github.com/deb74713e6aff8fdfce2)
 - [Vim Cheats](https://gist.github.com/c002acb756d5cf09b1ad98494a81baa3)
 
------
+## Appearance `🅖-collapsible`
 
-<!-- {$gd_collapsible_appearance} -->
-
------
-
-Themes <!-- {$gd_css} -->
+css `🅖-datalist`
 - [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
 
-<!-- {$gd_slider_columns="2,1,4,1"} -->
+columns `🅖-slider="2,1,4,1"`
 
-<!-- {$gd_theme_variables} -->
+`🅖-theme-variables`
 
-<!-- {$gd_collapsible_end_appearance} -->
+## Contents `🅖-collapsible`
 
-<!-- {$gd_collapsible_contents} -->
+`🅖-toc`
 
-<!-- {$gd_toc} -->
+## Help `🅖-group`
 
-<!-- {$gd_collapsible_end_contents} -->
-
-<!-- {$gd_hide} -->
+`🅖-help`
+`🅖-hide`

@@ -9,14 +9,14 @@ var toggle_html='<span class="toggle"></span>';
 
 function main() {
     gd.status.log();
-    var variations = gd.update_parameter('variations');
-    render_variations(variations);
-    var c = $('.info .field.slider.columns').attr('data-value');
-    if ( !gd.status.has('theme-changed') ) columnize( c );
-    alternate();
-    draggable();
-    update_toc();
-    register_events();
+    // var variations = gd.update_parameter('variations');
+    // render_variations(variations);
+    // var c = $('.info .field.slider.columns').attr('data-value');
+    // if ( !gd.status.has('theme-changed') ) columnize( c );
+    // alternate();
+    // draggable();
+    // update_toc();
+    // register_events();
 }
 
 function columnize(columns) {
