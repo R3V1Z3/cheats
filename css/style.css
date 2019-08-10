@@ -37,19 +37,19 @@ body, html, #wrapper, .container {
   margin: 0px 10px 0px 10px;
 }
 
-.gd-default .info h1 {
+.bd-default .info h1 {
   font-size: 1.5em;
   letter-spacing: -0.1em;
 }
 
 .cheats,
-.gd-default .info h1 {
+.bd-default .info h1 {
   font-size: 1.5em;
   letter-spacing: -0.1em;
 }
 
 .cheats:after,
-.gd-default .info h1:after {
+.bd-default .info h1:after {
   content: 'cheat';
   color: #ff851b;
 }
@@ -194,7 +194,7 @@ kbd:hover {
 
 /* Info panel */
 
-#gd-cheats .container .info a.help-ribbon {
+#bd-cheats .container .info a.help-ribbon {
   font-family: 'Share Tech Mono';
 }
 

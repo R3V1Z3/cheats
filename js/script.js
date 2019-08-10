@@ -1,25 +1,129 @@
-const gd = new GitDown('#wrapper', {
-    title: 'CHEATS',
-    content: 'README.md',
-    variations: 'true',
-    callback: main
-});
-
 var toggle_html='<span class="toggle"></span>';
 
-function main() {
-    gd.status.log();
-    // var variations = gd.update_parameter('variations');
+class Cheats extends BreakDown {
+
+    constructor(el, options) {
+        super(el, options);
+    }
+
+    ready() {
+        // this.updateOffsets();
+        // this.extractSvg('filters.svg');
+        // this.addFx();
+        // this.vignette();
+        // this.centerView();
+        // this.registerAppEvents();
+        // this.updateSliderValue( 'outer-space', this.settings.getValue('outer-space') );
+        // this.centerView();
+    }
+
+    updateSliderValue( name, value ) {
+        var slider = this.wrapper.querySelector( `.nav .slider.${name} input` );
+        slider.value = value;
+        this.updateField(slider, value);
+    }
+
+    registerAppEvents() {
+
+        if ( this.status.has('app-events-registered') ) return;
+        else this.status.add('app-events-registered');
+
+        window.addEventListener( 'resize', e => this.centerView() );
+
+        this.events.add('.nav .collapsible.perspective .field.slider input', 'input', this.centerView);
+        this.events.add('.nav .collapsible.dimensions .field.slider input', 'input', this.centerView);
+        this.events.add('.nav .field.slider.fontsize input', 'input', this.centerView);
+        this.events.add('.nav .field.slider.vignette input', 'input', this.vignette.bind(this));
+
+        let f = document.querySelector('.nav .field.select.svg-filter select');
+        f.addEventListener( 'change', this.svgChange.bind(this) );
+
+        // LEFT and RIGHT arrows
+        document.addEventListener('keyup', e => {
+            const key = e.key;
+            let c = '';
+            if ( key === 'ArrowLeft' ) {
+                c = this.sections.getPrev();
+            }
+            else if ( key === 'ArrowRight' ) {
+                c = this.sections.getNext();
+            }
+            this.sections.setCurrent(c);
+            this.goToSection();
+        }, this);
+
+        // mousewheel zoom handler
+        this.events.add('.inner', 'wheel', e => {
+            // disallow zoom within parchment content so user can safely scroll text
+            let translatez = document.querySelector('.nav .slider.translatez input');
+            if ( translatez === null ) return;
+            var v = Number( translatez.value );
+            if( e.deltaY < 0 ) {
+                v += 10;
+                if ( v > 500 ) v = 500;
+            } else{
+                v -= 10;
+                if ( v < -500 ) v = -500;
+            }
+            this.settings.setValue('translatez', v);
+            this.updateSliderValue( 'translatez', v );
+        }, this );
+
+        interact(this.eidInner)
+        .gesturable({
+            onmove: function (event) {
+                var scale = this.settings.getValue('translatez');
+                scale = scale * (5 + event.ds);
+                this.updateSliderValue( 'translatez', scale );
+                this.dragMoveListener(event);
+            }
+        })
+        .draggable({ onmove: this.dragMoveListener.bind(this) });
+
+    }
+
+    dragMoveListener (event) {
+        let target = event.target;
+        if ( !target.classList.contains('inner') ) return;
+        if ( event.buttons > 1 && event.buttons < 4 ) return;
+        let x = (parseFloat(target.getAttribute('data-x')) || 0);
+        let oldX = x;
+        x += event.dx;
+        let y = (parseFloat(target.getAttribute('data-y')) || 0);
+        let oldY = y;
+        y += event.dy;
+
+        // when middle mouse clicked and no movement, reset offset positions
+        if ( event.buttons === 4 ) {
+            x = this.settings.getDefault('offsetx');
+            y = this.settings.getDefault('offsety');
+        }
+
+        this.updateSliderValue( 'offsetx', x );
+        this.updateSliderValue( 'offsety', y );
+
+        // update the position attributes
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+
+        this.centerView();
+    }
+
+// BEGIN ORIGINAL code =======================================================
+
+main() {
+    bd.status.log();
+    // var variations = bd.update_parameter('variations');
     // render_variations(variations);
     // var c = $('.info .field.slider.columns').attr('data-value');
-    // if ( !gd.status.has('theme-changed') ) columnize( c );
+    // if ( !bd.status.has('theme-changed') ) columnize( c );
     // alternate();
     // draggable();
     // update_toc();
     // register_events();
 }
 
-function columnize(columns) {
+columnize(columns) {
     // begin by wrapping all sections in first column
     $('.section').wrapAll('<div class="column column1of' + columns + '" id="column1"/>');
     if( columns < 2 || columns > 4 ) {
@@ -30,9 +134,9 @@ function columnize(columns) {
     for (var i=2; i <= columns; i++) {
         $('.inner').append('<div class="column column1of' + columns + '" id="column' + i + '"/>');
     }
-    
+
     var column_counter = 1;
-    
+
     // arrange sections into columns
     $('.section').each(function() {
         if( column_counter > 1 ) {
@@ -46,7 +150,7 @@ function columnize(columns) {
     });
 }
 
-function alternate() {
+alternate() {
     // add alternate classes to paragraphs
     var counter = 0;
     $('.content').children().each(function() {
@@ -70,7 +174,7 @@ function alternate() {
     });
 }
 
-function draggable() {
+draggable() {
     // make sections draggable
     dragula( $('.column').toArray(),  {
         moves: function (el, container, handle) {
@@ -78,7 +182,7 @@ function draggable() {
         }
     }).on('drop', function (el, target, source, sibling) {
         // update toc after drop
-        var name_from = $(el).attr('id'); 
+        var name_from = $(el).attr('id');
         var name_to = $(sibling).attr('id');
         swap (  '.toc a[href*="#' + name_from + '"]',
                 '.toc a[href*="#' + name_to + '"]' );
@@ -86,7 +190,7 @@ function draggable() {
 }
 
 // from here: https://stackoverflow.com/questions/698301/is-there-a-native-jquery-function-to-switch-elements#answer-19033868
-function swap(a, b) {
+swap(a, b) {
     a = $(a); b = $(b);
     var tmp = $('<span>').hide();
     a.before(tmp);
@@ -94,7 +198,7 @@ function swap(a, b) {
     tmp.replaceWith(b);
 }
 
-function render_variations(selector) {
+render_variations(selector) {
     if ( selector === 'yes' || selector === 'true' ) selector = '.content li strong';
     if ( selector != '' ) {
         // handle variations, display first item
@@ -110,7 +214,7 @@ function render_variations(selector) {
             });
             $(this).html($html);
         });
-        
+
         // make variations clickable
         $(selector).click(function() {
             var current = $(this).find('.variation.current');
@@ -124,8 +228,8 @@ function render_variations(selector) {
     }
 }
 
-function update_toc() {
-    
+update_toc() {
+
     // add toggle buttons to sections
     if ( $('.section .toggle').length < 1 ) {
         $('.section a.handle').each(function() {
@@ -133,7 +237,7 @@ function update_toc() {
             $(this).html( t + toggle_html );
         });
     }
-    
+
     // add toggle buttons to toc
     $( '.info .toc a' ).each(function() {
         var t = $(this).html();
@@ -146,8 +250,8 @@ function update_toc() {
     });
 }
 
-function register_events() {
-    
+register_events() {
+
     // hide sections and toc reference when toggled
     $( '.section .toggle' ).click(function() {
         var name = $(this).parent().attr('name');
@@ -164,7 +268,7 @@ function register_events() {
         columnize( c );
         draggable();
     });
-    
+
     // add click event to toggle items in toc
     $( '.toc .toggle' ).click(function() {
         var name = $(this).parent().attr('href');
@@ -177,4 +281,6 @@ function register_events() {
             $(this).parent().addClass('hidden');
         }
     });
+  }
+
 }

@@ -32,7 +32,7 @@ URL parameters can take effort to learn and use. Here are some examples to help 
 - Change number of columns to 2 and default font size to 100%: [?columns=2&fontsize=100](?columns=2&fontsize=100)
 
 ## Built for GitHub Pages
-CHEATScheat is designed for use with [GitHub Pages](https://pages.github.com/) and made to be easily forked. This file contains hidden options for use when forked. 
+CHEATScheat is designed for use with [GitHub Pages](https://pages.github.com/) and made to be easily forked. This file contains hidden options for use when forked.
 
 Options are hidden using HTML comment tags like so:
 ```
@@ -49,7 +49,7 @@ Options available:
 - `disable_hide` - disable hiding of the info panel.
 - `parameters_disallowed` - a list of URL parameters to disallow, separated by |
 
-# CHEATS `🅖-nav`
+# CHEATS `🅑-nav`
 
 `ⓘ The code below designates a list of content sources the user will be able to select from in the app.`
 
@@ -57,7 +57,7 @@ Markdown cheatsheet viewer
 
 -----
 
-content `🅖-datalist`
+content `🅑-datalist`
 - [Alexa Cheats](https://gist.github.com/2a06603706fd7c2eb5c93f34ed316354)
 - [Tmux Cheatsheet](https://gist.github.com/2961058)
 - [Screen Cheatsheet](https://gist.github.com/af918e1618682638aa82)
@@ -66,20 +66,20 @@ content `🅖-datalist`
 - [An exhibit of Markdown](https://gist.github.com/deb74713e6aff8fdfce2)
 - [Vim Cheats](https://gist.github.com/c002acb756d5cf09b1ad98494a81baa3)
 
-## Appearance `🅖-collapsible`
+## Appearance `🅑-collapsible`
 
-css `🅖-datalist`
+css `🅑-datalist`
 - [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
 
-columns `🅖-slider="2,1,4,1"`
+columns `🅑-slider="2,1,4,1"`
 
-`🅖-theme-variables`
+`🅑-theme-variables`
 
-## Contents `🅖-collapsible`
+## Contents `🅑-collapsible`
 
-`🅖-toc`
+`🅑-toc`
 
-## Help `🅖-group`
+## Help `🅑-group`
 
-`🅖-help`
-`🅖-hide`
+`🅑-help`
+`🅑-hide`

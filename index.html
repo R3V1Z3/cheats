@@ -1,31 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" id="gd-cheats" class="gd-columns">
+<html lang="en" id="bd-cheats" class="bd-columns">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="//rawgit.com/bevacqua/dragula/master/dist/dragula.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
-    <script src="//ugotsta.github.io/gitdown-madly/js/sanitizer.js"></script>
-    <script src="//ugotsta.github.io/gitdown-madly/js/gitdown.js"></script>
-    
-    <link rel="stylesheet" type="text/css" href="//rawgit.com/bevacqua/dragula/master/dist/dragula.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="//ugotsta.github.io/gitdown-madly/css/style.css">
-    
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//rawgit.com/bevacqua/dragula/master/dist/dragula.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+  <script src="//ugotsta.github.io/breakdown/js/sanitizer.js"></script>
+  <script src="//ugotsta.github.io/breakdown/js/breakdown.js"></script>
+  <script src="js/script.js"></script>
 
-    <title>Cheats</title>
+  <link rel="stylesheet" type="text/css" href="//rawgit.com/bevacqua/dragula/master/dist/dragula.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="//ugotsta.github.io/breakdown/css/style.css">
 
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  <title>Cheats</title>
 </head>
 
 <body id="custom">
-    <div id="wrapper">
-    </div>
-    
-    <script src="js/script.js"></script>
+  <div id="wrapper">
+  </div>
+
+  <script>
+    const bd = new Cheats('#wrapper', {
+      title: 'CHEATS',
+      content: 'README.md',
+      variations: 'true',
+      callback: ready
+    });
+
+    function ready() {
+      bd.ready();
+      console.log('Callback executed.');
+    }
+  </script>
 </body>
 
 </html>
