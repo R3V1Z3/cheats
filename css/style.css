@@ -2,6 +2,7 @@
 
 :root {
   --fontsize: 100%;
+  --columns: 2;
 }
 
 /* General */
@@ -29,6 +30,7 @@ body, html, #wrapper, .container {
 .inner {
   width: 100%;
   font-size: var(--fontsize);
+  column-count: var(--columns);
 }
 
 /* Header */

@@ -7,14 +7,7 @@ class Cheats extends BreakDown {
     }
 
     ready() {
-        // this.updateOffsets();
-        // this.extractSvg('filters.svg');
-        // this.addFx();
-        // this.vignette();
-        // this.centerView();
         // this.registerAppEvents();
-        // this.updateSliderValue( 'outer-space', this.settings.getValue('outer-space') );
-        // this.centerView();
     }
 
     updateSliderValue( name, value ) {
@@ -35,8 +28,7 @@ class Cheats extends BreakDown {
         this.events.add('.nav .field.slider.fontsize input', 'input', this.centerView);
         this.events.add('.nav .field.slider.vignette input', 'input', this.vignette.bind(this));
 
-        let f = document.querySelector('.nav .field.select.svg-filter select');
-        f.addEventListener( 'change', this.svgChange.bind(this) );
+        // this.events.add('.nav .field.select.svg-filter select', 'change', this.svgChange.bind(this));
 
         // LEFT and RIGHT arrows
         document.addEventListener('keyup', e => {
@@ -113,41 +105,12 @@ class Cheats extends BreakDown {
 
 main() {
     bd.status.log();
-    // var variations = bd.update_parameter('variations');
-    // render_variations(variations);
-    // var c = $('.info .field.slider.columns').attr('data-value');
-    // if ( !bd.status.has('theme-changed') ) columnize( c );
-    // alternate();
-    // draggable();
-    // update_toc();
+    var variations = bd.update_parameter('variations');
+    render_variations(variations);
+    alternate();
+    draggable();
+    update_toc();
     // register_events();
-}
-
-columnize(columns) {
-    // begin by wrapping all sections in first column
-    $('.section').wrapAll('<div class="column column1of' + columns + '" id="column1"/>');
-    if( columns < 2 || columns > 4 ) {
-        return;
-    }
-
-    // PROBLEM: first column is gettting column div added twice
-    for (var i=2; i <= columns; i++) {
-        $('.inner').append('<div class="column column1of' + columns + '" id="column' + i + '"/>');
-    }
-
-    var column_counter = 1;
-
-    // arrange sections into columns
-    $('.section').each(function() {
-        if( column_counter > 1 ) {
-            // move this section to next column
-            $(this).detach().appendTo('#column' + column_counter);
-        }
-        column_counter += 1;
-        if( column_counter > columns ) {
-            column_counter = 1;
-        }
-    });
 }
 
 alternate() {
@@ -258,15 +221,6 @@ register_events() {
         $( '#' + name ).hide();
         // add hidden class to toc item;
         $( '.toc a[href*="#' + name + '"]' ).addClass('hidden');
-    });
-
-    $('.info .slider.columns input').on('input change', function(e) {
-        var c = $(this).val();
-        // move .sections to .inner
-        $('.section').appendTo('.inner');
-        $('.column').remove();
-        columnize( c );
-        draggable();
     });
 
     // add click event to toggle items in toc
