@@ -29,8 +29,10 @@ body, html, #wrapper, .container {
 
 .inner {
   width: 100%;
+  height: auto;
   font-size: var(--fontsize);
   column-count: var(--columns);
+  column-gap: 0;
 }
 
 /* Header */
@@ -61,8 +63,9 @@ body, html, #wrapper, .container {
 .section {
   position: relative;
   background-color: #234AAB;
-  margin: 20px 10px;
+  margin: 20px 10px 0 10px;
   padding: 0;
+  display: inline-block;
 }
 
 a {
