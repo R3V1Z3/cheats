@@ -33,6 +33,7 @@ body, html, #wrapper, .container {
   font-size: var(--fontsize);
   column-count: var(--columns);
   column-gap: 0;
+  padding-bottom: 20px;
 }
 
 /* Header */
@@ -61,6 +62,9 @@ body, html, #wrapper, .container {
 /* Command sections */
 
 .section {
+  width: fill-available;
+  width: -moz-available;
+  width: -webkit-fill-available;
   position: relative;
   background-color: #234AAB;
   margin: 20px 10px 0 10px;
@@ -139,10 +143,6 @@ table {
 th {
     background-color: rgba(255,255,255,0.45);
     text-align: left;
-}
-
-code {
-  width: 100%;
 }
 
 pre {

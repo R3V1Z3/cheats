@@ -53,7 +53,7 @@ Options available:
 
 `ⓘ The code below designates a list of content sources the user will be able to select from in the app.`
 
-Markdown cheatsheet viewer
+Cheatsheets in Markdown
 
 -----
 
