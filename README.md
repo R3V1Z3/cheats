@@ -69,7 +69,7 @@ content `🅑-datalist`
 ## Appearance `🅑-collapsible`
 
 css `🅑-datalist`
-- [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://ugotsta.github.io/alexa-cheats/).
+- [Alexa Cheats](https://gist.github.com/3340cb9dcb273289b51aef3570f5304d) - Port of theme from [Alexa Cheats](https://R3V1Z3.github.io/alexa-cheats/).
 
 columns `🅑-slider="2,1,4,1"`
 
